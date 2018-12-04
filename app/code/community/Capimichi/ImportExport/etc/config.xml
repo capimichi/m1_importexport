@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Capimichi_importexport>
+            <version>0.1.0</version>
+        </Capimichi_importexport>
+    </modules>
+
+
+    <global>
+        <helpers>
+            <importexport>
+                <class>Capimichi_ImportExport_Helper</class>
+            </importexport>
+        </helpers>
+    </global>
+
+
+    <admin>
+        <routers>
+            <importexport>
+                <use>admin</use>
+                <args>
+                    <module>Capimichi_ImportExport</module>
+                    <frontname>importexport</frontname>
+                </args>
+            </importexport>
+        </routers>
+    </admin>
+
+
+    <adminhtml>
+        <menu>
+            <menu1 translate="title" module="ImportExport">
+                <title>Capimichi ImportExport</title>
+                <sort_order>60</sort_order>
+                <children>
+                    <menuitem1 module="ImportExport">
+                        <title>Menu item 1</title>
+                        <action>importexport/example</action>
+                    </menuitem1>
+                </children>
+            </menu1>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <menu1 translate="title" module="ImportExport">
+                            <title>Capimichi ImportExport</title>
+                            <sort_order>60</sort_order>
+                            <children>
+                                <menuitem1>
+                                    <title>Menu item 1</title>
+                                </menuitem1>
+                            </children>
+                        </menu1>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+</config>
