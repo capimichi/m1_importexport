@@ -5,8 +5,6 @@
             <version>0.1.0</version>
         </Capimichi_importexport>
     </modules>
-
-
     <global>
         <helpers>
             <importexport>
@@ -14,8 +12,6 @@
             </importexport>
         </helpers>
     </global>
-
-
     <admin>
         <routers>
             <importexport>
@@ -27,12 +23,10 @@
             </importexport>
         </routers>
     </admin>
-
-
     <adminhtml>
         <menu>
             <menu1 translate="title" module="ImportExport">
-                <title>Capimichi ImportExport</title>
+                <title>CM Import Export</title>
                 <sort_order>60</sort_order>
                 <children>
                     <menuitem1 module="ImportExport">
@@ -60,5 +54,4 @@
             </resources>
         </acl>
     </adminhtml>
-
 </config>
