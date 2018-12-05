@@ -14,13 +14,13 @@
     </global>
     <admin>
         <routers>
-            <importexport>
+            <capimichi_importexport>
                 <use>admin</use>
                 <args>
                     <module>Capimichi_ImportExport</module>
                     <frontname>importexport</frontname>
                 </args>
-            </importexport>
+            </capimichi_importexport>
         </routers>
     </admin>
     <adminhtml>
@@ -36,22 +36,22 @@
                 </children>
             </menu1>
         </menu>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <menu1 translate="title" module="ImportExport">
-                            <title>Capimichi ImportExport</title>
-                            <sort_order>60</sort_order>
-                            <children>
-                                <menuitem1>
-                                    <title>Menu item 1</title>
-                                </menuitem1>
-                            </children>
-                        </menu1>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
+        <!--<acl>-->
+        <!--<resources>-->
+        <!--<admin>-->
+        <!--<children>-->
+        <!--<menu1 translate="title" module="ImportExport">-->
+        <!--<title>Capimichi ImportExport</title>-->
+        <!--<sort_order>60</sort_order>-->
+        <!--<children>-->
+        <!--<menuitem1>-->
+        <!--<title>Menu item 1</title>-->
+        <!--</menuitem1>-->
+        <!--</children>-->
+        <!--</menu1>-->
+        <!--</children>-->
+        <!--</admin>-->
+        <!--</resources>-->
+        <!--</acl>-->
     </adminhtml>
 </config>
