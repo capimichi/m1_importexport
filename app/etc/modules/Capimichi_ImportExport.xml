@@ -2,9 +2,9 @@
 
 <config>
     <modules>
-        <ActiveCodeline_SampleModule1>
+        <Capimichi_ImportExport>
             <active>true</active>
             <codePool>local</codePool>
-        </ActiveCodeline_SampleModule1>
+        </Capimichi_ImportExport>
     </modules>
 </config>

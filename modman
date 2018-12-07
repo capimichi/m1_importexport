@@ -2,4 +2,4 @@
 # app/code
 app/code/local/Capimichi/ImportExport            app/code/local/Capimichi/ImportExport
 # app/etc
-app/etc/modules/ActiveCodeline_SampleModule1.xml            app/etc/modules/ActiveCodeline_SampleModule1.xml
+app/etc/modules/Capimichi_ImportExport.xml            app/etc/modules/Capimichi_ImportExport.xml
