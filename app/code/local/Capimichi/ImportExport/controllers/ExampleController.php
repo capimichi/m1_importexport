@@ -1,6 +1,6 @@
 <?php
 
-class ActiveCodeline_SampleModule1_ExampleController extends Mage_Adminhtml_Controller_Action
+class Capimichi_ImportExport_ExampleController extends Mage_Adminhtml_Controller_Action
 {
 
     public function indexAction()

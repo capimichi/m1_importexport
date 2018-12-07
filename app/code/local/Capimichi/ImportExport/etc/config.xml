@@ -2,30 +2,30 @@
 
 <config>
     <modules>
-        <ActiveCodeline_SampleModule1>
+        <Capimichi_ImportExport>
             <version>0.1.0</version>
-        </ActiveCodeline_SampleModule1>
+        </Capimichi_ImportExport>
     </modules>
         
         
 <global>
         <helpers>
-            <SampleModule1>
-                <class>ActiveCodeline_SampleModule1_Helper</class>
-            </SampleModule1>  
+            <ImportExport>
+                <class>Capimichi_ImportExport_Helper</class>
+            </ImportExport>
         </helpers>
 </global>        
     
     
         <admin>
         <routers>
-            <samplemodule1>
+            <importexport>
                 <use>admin</use>
                 <args>
-                    <module>ActiveCodeline_SampleModule1</module>
-                    <frontName>samplemodule1</frontName>
+                    <module>Capimichi_ImportExport</module>
+                    <frontName>importexport</frontName>
                 </args>
-            </samplemodule1>
+            </importexport>
         </routers>
     </admin>
     
@@ -34,13 +34,13 @@
     
     <adminhtml>
         <menu>
-            <menu1 translate="title" module="SampleModule1">
-                <title>ActiveCodeline SampleModule1</title>
+            <menu1 translate="title" module="ImportExport">
+                <title>Capimichi ImportExport</title>
                 <sort_order>60</sort_order>
                 <children>
-                    <menuitem1 module="SampleModule1">
+                    <menuitem1 module="ImportExport">
                         <title>Menu item 1</title>
-                        <action>samplemodule1/example</action>
+                        <action>importexport/example</action>
                     </menuitem1>
                 </children>                
             </menu1>
@@ -49,8 +49,8 @@
             <resources>
                 <admin>
                     <children>
-                        <menu1 translate="title" module="SampleModule1">
-							<title>ActiveCodeline SampleModule1</title>
+                        <menu1 translate="title" module="ImportExport">
+							<title>Capimichi ImportExport</title>
                 			<sort_order>60</sort_order>
                             <children>
                                 <menuitem1>
