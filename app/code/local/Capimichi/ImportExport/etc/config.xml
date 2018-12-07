@@ -39,29 +39,29 @@
                 <sort_order>60</sort_order>
                 <children>
                     <menuitem1 module="ImportExport">
-                        <title>Menu item 1</title>
+                        <title>Import</title>
                         <action>importexport/example</action>
                     </menuitem1>
                 </children>                
             </menu1>
         </menu>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <menu1 translate="title" module="ImportExport">
-							<title>Capimichi ImportExport</title>
-                			<sort_order>60</sort_order>
-                            <children>
-                                <menuitem1>
-                                    <title>Menu item 1</title>
-                                </menuitem1>
-                            </children>
-                       </menu1>
-                   </children>
-               </admin>
-           </resources>
-        </acl>
+        <!--<acl>-->
+            <!--<resources>-->
+                <!--<admin>-->
+                    <!--<children>-->
+                        <!--<menu1 translate="title" module="ImportExport">-->
+							<!--<title>CM ImportExport</title>-->
+                			<!--<sort_order>60</sort_order>-->
+                            <!--<children>-->
+                                <!--<menuitem1>-->
+                                    <!--<title>Import</title>-->
+                                <!--</menuitem1>-->
+                            <!--</children>-->
+                       <!--</menu1>-->
+                   <!--</children>-->
+               <!--</admin>-->
+           <!--</resources>-->
+        <!--</acl>-->
     </adminhtml>    
     
 </config>
