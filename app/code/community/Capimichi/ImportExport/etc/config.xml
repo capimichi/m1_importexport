@@ -31,7 +31,7 @@
                 <children>
                     <menuitem1 module="ImportExport">
                         <title>Menu item 1</title>
-                        <action>importexport/example</action>
+                        <action>adminhtml/example</action>
                     </menuitem1>
                 </children>
             </menu1>
