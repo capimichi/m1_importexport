@@ -35,7 +35,7 @@
     <adminhtml>
         <menu>
             <menu1 translate="title" module="ImportExport">
-                <title>Capimichi ImportExport</title>
+                <title>CM ImportExport</title>
                 <sort_order>60</sort_order>
                 <children>
                     <menuitem1 module="ImportExport">
