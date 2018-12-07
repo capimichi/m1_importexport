@@ -40,8 +40,12 @@
                 <children>
                     <menuitem1 module="ImportExport">
                         <title>Import</title>
-                        <action>importexport/example</action>
+                        <action>importexport/import</action>
                     </menuitem1>
+                    <menuitem2 module="ImportExport">
+                        <title>Export</title>
+                        <action>importexport/export</action>
+                    </menuitem2>
                 </children>                
             </menu1>
         </menu>
