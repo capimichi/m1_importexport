@@ -1,6 +1,6 @@
 <?php
 
-class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_Action
+class Capimichi_ImportExport_AjaxImportController extends Mage_Adminhtml_Controller_Action
 {
 
     public function indexAction()
