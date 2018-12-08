@@ -1,4 +1,6 @@
-<form method="post" enctype="multipart/form-data">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<form id="import_form" method="post" enctype="multipart/form-data" action="">
 
     <input type="hidden" name="progress_file"
            value="<?php echo sys_get_temp_dir() . DIRECTORY_SEPARATOR . implode("_", [
@@ -12,3 +14,28 @@
         <input type="file" name="file">
     </label>
 </form>
+
+<script>
+    jQuery(function () {
+
+        var $form = jQuery("#import_form");
+        $form.on("submit", function (e) {
+
+            var formData = new FormData(this);
+            jQuery.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    alert(data)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        }
+        e.preventDefault();
+    });
+    })
+    ;
+</script>
