@@ -4,4 +4,4 @@ app/code/local/Capimichi/ImportExport            app/code/local/Capimichi/Import
 # app/etc
 app/etc/modules/Capimichi_ImportExport.xml            app/etc/modules/Capimichi_ImportExport.xml
 # app/design
-app/design/frontend/base/default/template/capimichi/import_export/import/import.phtml            app/design/frontend/base/default/template/capimichi/import_export/import/import.phtml
+app/design/adminhtml/default/default/template/capimichi/import_export/import/import.phtml            app/design/adminhtml/default/default/template/capimichi/import_export/import/import.phtml
