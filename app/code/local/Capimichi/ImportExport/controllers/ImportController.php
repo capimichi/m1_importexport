@@ -21,5 +21,5 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         echo json_encode([
             'ciao' => 'si'
         ]);
-    }
+        die();}
 }
