@@ -1,5 +1,12 @@
 <form method="post" enctype="multipart/form-data">
 
+    <input type="hidden" name="progress_file"
+           value="<?php echo sys_get_temp_dir() . DIRECTORY_SEPARATOR . implode("_", [
+                   'cmimport',
+                   md5(rand(0, 999999999)),
+                   ".json",
+               ]); ?>">
+
     <label>
         Import
         <input type="file" name="file">
