@@ -1,6 +1,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<form id="import_form" method="post" enctype="multipart/form-data" action="">
+<form id="import_form" method="post" enctype="multipart/form-data" action="<?php echo $this->getUrl('importexport/import/run'); ?>">
 
     <input type="hidden" name="progress_file"
            value="<?php echo sys_get_temp_dir() . DIRECTORY_SEPARATOR . implode("_", [
