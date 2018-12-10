@@ -10,9 +10,9 @@
 
     <global>
         <helpers>
-            <ImportExport>
+            <importexport>
                 <class>Capimichi_ImportExport_Helper</class>
-            </ImportExport>
+            </importexport>
         </helpers>
     </global>
 

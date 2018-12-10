@@ -35,7 +35,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $response['MISSING FILE'];
         }
 
-        echo json_encode($_FILES);
+        echo json_encode($response);
     }
 
 }
