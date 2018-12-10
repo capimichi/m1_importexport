@@ -1,14 +1,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<form id="import_form" method="post" enctype="multipart/form-data"
-      action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajax"); ?>">
-
-    <input type="hidden" name="progress_file"
-           value="<?php echo sys_get_temp_dir() . DIRECTORY_SEPARATOR . implode("_", [
-                   'cmimport',
-                   md5(rand(0, 999999999)),
-                   ".json",
-               ]); ?>">
+<form id="import_form" method="post" enctype="multipart/form-data">
+    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
     <label>
         Import
@@ -22,15 +15,16 @@
     $j = jQuery.noConflict();
 
     $j(function () {
+
         var $form = $j("#import_form");
         $form.on("submit", function (e) {
             var formData = new FormData(this);
             $j.ajax({
-                url: $form.attr("action"),
+                url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximport"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    alert(response);
+                    console.log(response);
                 },
                 cache: false,
                 contentType: false,
