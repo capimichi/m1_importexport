@@ -15,4 +15,8 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         // "Output" display
         $this->renderLayout();
     }
+
+    public function ajaxAction(){
+
+    }
 }
