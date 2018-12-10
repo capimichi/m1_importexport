@@ -16,7 +16,12 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         $this->renderLayout();
     }
 
-    public function ajaxAction(){
+    public function ajaxAction()
+    {
+        header('Content-Type: application/json');
 
+        echo json_encode([
+            'test' => 'SI',
+        ]);
     }
 }
