@@ -28,9 +28,14 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $filePath = $_FILES['file']['tmp_name'];
             $rows = [];
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
-                $rows[] = $row;
+
+                $product = Mage::helper('importexport/ProductRow')->rowToSimpleProduct($row);
+
+                $product->save();
+
+                $rows[] = $product->getId();
             }
-            $response['rows'] = $rows;
+            $response['products'] = $rows;
         } else {
             $response['MISSING FILE'];
         }
