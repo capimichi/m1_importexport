@@ -20,8 +20,19 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
     {
         header('Content-Type: application/json');
 
-        for ($i = 0; $i < 100; $i++) {
+        $response = [
+            'status' => 'OK',
+        ];
 
+        if (isset($_FILES['file'])) {
+            $filePath = $_FILES['file']['tmp_name'];
+            $rows = [];
+            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                $rows[] = $row;
+            }
+            $response['rows'] = $rows;
+        } else {
+            $response['MISSING FILE'];
         }
 
         echo json_encode($_FILES);
