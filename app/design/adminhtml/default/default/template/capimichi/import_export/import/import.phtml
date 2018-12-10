@@ -26,7 +26,7 @@
         $form.on("submit", function (e) {
             var formData = new FormData(this);
             $j.ajax({
-                url: window.location.pathname,
+                url: $form.attr("action"),
                 type: 'POST',
                 data: formData,
                 success: function (response) {
