@@ -1,4 +1,4 @@
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 
 <form id="import_form" method="post" enctype="multipart/form-data"
       action="<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/import/run', array('_secure' => true)); ?>">
@@ -16,26 +16,26 @@
     </label>
 </form>
 
-<script>
-    jQuery(function () {
-
-        var $form = jQuery("#import_form");
-        $form.on("submit", function (e) {
-
-            var formData = new FormData(this);
-            jQuery.ajax({
-                url: window.location.pathname,
-                type: 'POST',
-                data: formData,
-                success: function (data) {
-                    alert(data)
-                },
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-
-            e.preventDefault();
-        });
-    });
-</script>
+<!--<script>-->
+<!--    jQuery(function () {-->
+<!---->
+<!--        var $form = jQuery("#import_form");-->
+<!--        $form.on("submit", function (e) {-->
+<!---->
+<!--            var formData = new FormData(this);-->
+<!--            jQuery.ajax({-->
+<!--                url: window.location.pathname,-->
+<!--                type: 'POST',-->
+<!--                data: formData,-->
+<!--                success: function (data) {-->
+<!--                    alert(data)-->
+<!--                },-->
+<!--                cache: false,-->
+<!--                contentType: false,-->
+<!--                processData: false-->
+<!--            });-->
+<!---->
+<!--            e.preventDefault();-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
