@@ -41,6 +41,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $metaTitle = empty($row[self::META_TITLE_KEY]) ? "" : $row[self::META_TITLE_KEY];
         $metaDescription = empty($row[self::META_DESCRIPTION_KEY]) ? "" : $row[self::META_DESCRIPTION_KEY];
 
+        $attributes = Mage::getSingleton('eav/config')
+            ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
+            ->getAttributeCollection()
+            ->addSetInfo();
+
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
         if (!$product) {
             $product = Mage::getModel('catalog/product');
@@ -54,7 +59,25 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         foreach ($row as $key => $value) {
 
             if (substr($key, 0, 4) == "att_") {
-                $product->setData(preg_replace("/^att_/is", '', $key), $value);
+
+                $attributeName = preg_replace("/^att_/is", '', $key);
+
+                $type = null;
+                /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+                foreach ($attributes as $attribute) {
+                    if ($attributeName == $attribute->getName()) {
+                        $type = $attribute->getData('frontend_input');
+                    }
+                }
+
+                switch ($type) {
+                    case "select":
+                        $product->setData($attributeName, $product->getResource()->getAttribute($attributeName)->getSource()->getOptionId($value));
+                        break;
+                    case "text":
+                        $product->setData($attributeName, $value);
+                        break;
+                }
             }
         }
 
