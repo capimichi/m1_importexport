@@ -7,18 +7,20 @@
         Marca
         <select name="manufacturer">
             <option value>-</option>
+            <?php
+            $attribute = Mage::getSingleton('eav/config')
+                ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
 
+            if ($attribute->usesSource()) {
+                $options = $attribute->getSource()->getAllOptions(false);
+                foreach ($options as $option) : ?>
+                    <option value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></option>
+                <?php endforeach;
+            }
+            ?>
         </select>
     </label>
-    <?php
-    $attribute = Mage::getSingleton('eav/config')
-        ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
 
-    if ($attribute->usesSource()) {
-        $options = $attribute->getSource()->getAllOptions(false);
-        var_dump($options);
-    }
-    ?>
 
     <input type="submit" value="Importa">
 </form>
