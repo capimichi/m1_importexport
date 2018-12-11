@@ -51,6 +51,13 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->setStoreId(\Mage::app()->getStore()->getId());
         }
 
+        foreach ($row as $key => $value) {
+
+            if (substr($key, 0, 4) == "att_") {
+                $product->setData(preg_replace("/^att_/is", '', $key), $value);
+            }
+        }
+
         $product->setName($title);
         $product->setStatus($status);
         $product->setWeight($weight);
