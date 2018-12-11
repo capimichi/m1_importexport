@@ -44,6 +44,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
         if (!$product) {
             $product = Mage::getModel('catalog/product');
+            $product->setSku($sku);
             $product->setWebsiteIds([1]);
             $product->setTypeId('simple');
             $product->setCreatedAt(strtotime('now'));
