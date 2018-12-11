@@ -38,9 +38,9 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                 ->addAttributeToFilter('manufacturer', array('eq' => $manufacturer));
         }
 
-        fputcsv($f, Mage::helper('importexport/Csv')->getRowHeader());
+        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader());
         foreach ($products as $product) {
-            $row = Mage::helper('importexport/Csv')->simpleProductToRow($product);
+            $row = Mage::helper('importexport/ProductRow')->simpleProductToRow($product);
             fputcsv($f, $row);
         }
         fclose($f);
