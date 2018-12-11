@@ -10,7 +10,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         
         // "Inject" into display
         // THe below example will not actualy show anything since the core/template is empty
-        $this->_addContent($this->getLayout()->createBlock('core/template'));
+        $this->_addContent($this->getLayout()->createBlock('core/template')->setTemplate('capimichi/import_export/export/export.phtml'));
         
         // echo "Hello developer...";
                 
