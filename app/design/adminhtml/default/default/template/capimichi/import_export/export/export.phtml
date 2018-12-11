@@ -1,0 +1,24 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<form id="import_form" method="post" enctype="multipart/form-data">
+    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
+
+    <label>
+        Marca
+        <select name="manufacturer">
+            <option value>-</option>
+
+        </select>
+    </label>
+    <?php
+    $attribute = Mage::getSingleton('eav/config')
+        ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
+
+    if ($attribute->usesSource()) {
+        $options = $attribute->getSource()->getAllOptions(false);
+        var_dump($options);
+    }
+    ?>
+
+    <input type="submit" value="Importa">
+</form>
