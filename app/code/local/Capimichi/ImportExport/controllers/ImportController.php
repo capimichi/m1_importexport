@@ -32,7 +32,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 $product = Mage::helper('importexport/ProductRow')->rowToSimpleProduct($row);
                 $product->save();
 
-                $stockItem = Mage::helper('importexport/StockRow')->rowToStock($row);
+                $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
                 $stockItem->save();
 
                 $rows[] = $product->getId();
