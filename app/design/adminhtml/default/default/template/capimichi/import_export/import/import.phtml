@@ -21,14 +21,21 @@
         var $form = $j("#import_form");
         $form.on("submit", function (e) {
             var formData = new FormData(this);
-            $j("body").waitMe({});
+            $j("body").waitMe({
+                effect: 'pulse',
+                text: 'Import...',
+                bg: 'rgba(51,51,51,0.8)',
+                color: '#ffffff'
+            });
+
+
             $j.ajax({
                 url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximport"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {
                     console.log(response);
-                    $j("body").waitMe("close");
+                    $j("body").waitMe("hide");
                 },
                 cache: false,
                 contentType: false,
