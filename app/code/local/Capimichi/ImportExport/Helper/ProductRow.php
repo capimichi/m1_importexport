@@ -83,4 +83,59 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
         return $product;
     }
+
+    public function getRowHeader()
+    {
+        return [
+            "riferimento",
+            "tipo",
+            "categoria",
+//            "att_ebay_sku",
+//            "att_finitura",
+//            "att_componeni_aggiuntivi",
+//            "att_fondello",
+            "descrizione",
+//            "att_manufacturer",
+            "titolo",
+//            "att_marca_moto",
+//            "att_modello_moto",
+            "prezzo",
+            "prezzo_speciale",
+            "attivo",
+            "peso",
+            "quantità",
+            "immagini",
+            "testo_magazzino",
+            "testo_no_magazzino",
+            "genitore",
+        ];
+    }
+
+    public function simpleProductToRow($product)
+    {
+        $row = [
+            $product->getSku(),
+            "simple",
+            implode("|", $product->getCategoryIds()),
+//            "att_ebay_sku",
+//            "att_finitura",
+//            "att_componeni_aggiuntivi",
+//            "att_fondello",
+            "descrizione",
+//            "att_manufacturer",
+            "titolo",
+//            "att_marca_moto",
+//            "att_modello_moto",
+            $product->getPrice(),
+            $product->getSpecialPrice(),
+            "attivo",
+            "peso",
+            "quantità",
+            "immagini",
+            "testo_magazzino",
+            "testo_no_magazzino",
+            "genitore",
+        ];
+        return $row;
+    }
 }

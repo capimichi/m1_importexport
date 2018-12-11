@@ -1,6 +1,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<form id="import_form" method="post" enctype="multipart/form-data">
+<form id="import_form" method="post" action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/export"); ?>" >
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
     <label>
@@ -24,3 +24,7 @@
 
     <input type="submit" value="Importa">
 </form>
+
+<script>
+    $j = jQuery.noConflict();
+</script>
