@@ -35,10 +35,12 @@
 
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         foreach ($attributes as $attribute) : ?>
-            <div class="attribute">
-                <label><?php echo $attribute->getFrontendLabel(); ?>
-                    <input type="checkbox" name="att_<?php echo $attribute->getName(); ?>" value="1"</label> &nbsp;
-            </div>
+            <?php if (!empty($attribute->getName())) : ?>
+                <div class="attribute">
+                    <label><?php echo $attribute->getFrontendLabel(); ?>
+                        <input type="checkbox" name="att_<?php echo $attribute->getName(); ?>" value="1"</label> &nbsp;
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 
