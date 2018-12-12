@@ -35,15 +35,23 @@
 
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         foreach ($attributes as $attribute) : ?>
-            <span style="width: 100%; max-width: 30px;">
-            <label><?php echo $attribute->getFrontendLabel(); ?>
-                <input type="checkbox" name="att_<?php echo $attribute->getName(); ?>" value="1"</label> &nbsp;
-                </span>
+            <div class="attribute">
+                <label><?php echo $attribute->getFrontendLabel(); ?>
+                    <input type="checkbox" name="att_<?php echo $attribute->getName(); ?>" value="1"</label> &nbsp;
+            </div>
         <?php endforeach; ?>
     </div>
 
     <input type="submit" value="Esporta">
 </form>
+
+<style>
+    .attribute {
+        width: 100%;
+        max-width: 40px;
+        display: inline-block;
+    }
+</style>
 
 <script>
     $j = jQuery.noConflict();
