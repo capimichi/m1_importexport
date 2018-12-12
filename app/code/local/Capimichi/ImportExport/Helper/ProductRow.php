@@ -107,9 +107,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $product;
     }
 
-    public function getRowHeader()
+    public function getRowHeader($attributeCodes)
     {
-        return [
+        $headers = [
             "riferimento",
             "tipo",
             "categoria",
@@ -132,9 +132,15 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "testo_no_magazzino",
             "genitore",
         ];
+
+        foreach ($attributeCodes as $attributeCode){
+            $headers[] = "att_" . $attributeCode;
+        }
+
+        return $headers;
     }
 
-    public function simpleProductToRow($product)
+    public function simpleProductToRow($product, $attributeCodes)
     {
         $row = [
             $product->getSku(),
@@ -159,6 +165,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "testo_no_magazzino",
             "genitore",
         ];
+
+        foreach ($attributeCodes as $attributeCode){
+            $row[] = $product->getData($attributeCode);
+        }
+
         return $row;
     }
 }

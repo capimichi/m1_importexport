@@ -22,6 +22,13 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
     {
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
 
+        $attributeCodes = [];
+        foreach ($_POST as $postKey => $postValue) {
+            if (substr($postKey, 0, 4) == "att_") {
+                $attributeCodes[] = $postKey;
+            }
+        }
+
         $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . implode("-", [
                 'cm-export',
                 strtotime('now'),
@@ -38,9 +45,9 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                 ->addAttributeToFilter('manufacturer', array('eq' => $manufacturer));
         }
 
-        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader());
+        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes));
         foreach ($products as $product) {
-            $row = Mage::helper('importexport/ProductRow')->simpleProductToRow($product);
+            $row = Mage::helper('importexport/ProductRow')->simpleProductToRow($product, $attributeCodes);
             fputcsv($f, $row);
         }
         fclose($f);
