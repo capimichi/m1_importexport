@@ -4,24 +4,25 @@
       action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/export"); ?>">
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
-    <div></div>
-    <label>
-        Marca
-        <select name="manufacturer">
-            <option value>-</option>
-            <?php
-            $attribute = Mage::getSingleton('eav/config')
-                ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
+    <div>
+        <label>
+            Marca
+            <select name="manufacturer">
+                <option value>-</option>
+                <?php
+                $attribute = Mage::getSingleton('eav/config')
+                    ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
 
-            if ($attribute->usesSource()) {
-                $options = $attribute->getSource()->getAllOptions(false);
-                foreach ($options as $option) : ?>
-                    <option value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></option>
-                <?php endforeach;
-            }
-            ?>
-        </select>
-    </label>
+                if ($attribute->usesSource()) {
+                    $options = $attribute->getSource()->getAllOptions(false);
+                    foreach ($options as $option) : ?>
+                        <option value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></option>
+                    <?php endforeach;
+                }
+                ?>
+            </select>
+        </label>
+    </div>
 
     <br>
 
@@ -34,8 +35,10 @@
 
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         foreach ($attributes as $attribute) : ?>
+            <span style="width: 100%; max-width: 30px;">
             <label><?php echo $attribute->getFrontendLabel(); ?>
                 <input type="checkbox" name="att_<?php echo $attribute->getName(); ?>" value="1"</label> &nbsp;
+                </span>
         <?php endforeach; ?>
     </div>
 
