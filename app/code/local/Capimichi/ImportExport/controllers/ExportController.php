@@ -25,7 +25,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         $attributeCodes = [];
         foreach ($_POST as $postKey => $postValue) {
             if (substr($postKey, 0, 4) == "att_") {
-                $attributeCodes[] = $postKey;
+                $attributeCodes[] = preg_replace("/^att_/is", "", $postKey);
             }
         }
 
