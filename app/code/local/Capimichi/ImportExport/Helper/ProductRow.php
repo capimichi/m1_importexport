@@ -131,7 +131,6 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "testo_magazzino",
             "testo_no_magazzino",
             "genitore",
-            "immagini",
         ];
 
         foreach ($attributeCodes as $attributeCode) {
@@ -146,11 +145,12 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $product = \Mage::getModel('catalog/product')->load($product->getId());
 
         $imageUrls = [];
-        if (is_array($product->getMediaGalleryImages())) {
+        if (count($product->getMediaGalleryImages())) {
             foreach ($product->getMediaGalleryImages() as $image) {
                 $imageUrls[] = $image->getUrl();
             }
         }
+
         $row = [
             $product->getSku(),
             "simple",
