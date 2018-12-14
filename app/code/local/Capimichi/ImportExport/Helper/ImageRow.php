@@ -6,7 +6,7 @@
  * Date: 11/12/18
  * Time: 16:39
  */
-class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
+class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
 {
     const IMAGES_KEY = "immagini";
 
