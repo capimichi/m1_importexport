@@ -131,9 +131,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "testo_magazzino",
             "testo_no_magazzino",
             "genitore",
+            "immagini",
         ];
 
-        foreach ($attributeCodes as $attributeCode){
+        foreach ($attributeCodes as $attributeCode) {
             $headers[] = "att_" . $attributeCode;
         }
 
@@ -146,15 +147,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->getSku(),
             "simple",
             implode("|", $product->getCategoryIds()),
-//            "att_ebay_sku",
-//            "att_finitura",
-//            "att_componeni_aggiuntivi",
-//            "att_fondello",
             "descrizione",
-//            "att_manufacturer",
             "titolo",
-//            "att_marca_moto",
-//            "att_modello_moto",
             $product->getPrice(),
             $product->getSpecialPrice(),
             "attivo",
@@ -166,7 +160,14 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "genitore",
         ];
 
-        foreach ($attributeCodes as $attributeCode){
+        $imageUrls = [];
+        foreach ($product->getMediaGalleryImages() as $image) {
+            $imageUrls[] = $image->getUrl();
+        }
+        $row[] = implode("|", $imageUrls);
+
+
+        foreach ($attributeCodes as $attributeCode) {
             $row[] = $product->getData($attributeCode);
         }
 
