@@ -22,6 +22,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
 
         $response = [
             'status' => 'OK',
+            'files'  => [],
         ];
 
         if (isset($_FILES['file'])) {
@@ -36,13 +37,13 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 $stockItem->save();
 
                 $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
-                foreach ($imageFiles as $imageFile){
+                array_reverse($imageFiles);
+                foreach ($imageFiles as $imageFile) {
                     $imageViews = [
                         "small_image",
                         "thumbnail",
                         "image",
                     ];
-
                     $product->addImageToMediaGallery($imageFile, $imageViews, false, false);
                 }
                 $product->save();

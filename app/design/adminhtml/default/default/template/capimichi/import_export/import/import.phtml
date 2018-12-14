@@ -37,6 +37,9 @@
                     console.log(response);
                     $j("body").waitMe("hide");
                 },
+                error: function (request, status, error) {
+                    $j("body").waitMe("hide");
+                },
                 cache: false,
                 contentType: false,
                 processData: false
