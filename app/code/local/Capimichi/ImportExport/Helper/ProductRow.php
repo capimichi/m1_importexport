@@ -143,6 +143,12 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
     public function simpleProductToRow($product, $attributeCodes)
     {
+        $imageUrls = [];
+        if (is_array($product->getMediaGalleryImages())) {
+            foreach ($product->getMediaGalleryImages() as $image) {
+                $imageUrls[] = $image->getUrl();
+            }
+        }
         $row = [
             $product->getSku(),
             "simple",
@@ -154,19 +160,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "attivo",
             "peso",
             "quantità",
-            "immagini",
+            implode("|", $imageUrls),
             "testo_magazzino",
             "testo_no_magazzino",
             "genitore",
         ];
-
-        $imageUrls = [];
-        if (is_array($product->getMediaGalleryImages())) {
-            foreach ($product->getMediaGalleryImages() as $image) {
-                $imageUrls[] = $image->getUrl();
-            }
-        }
-        $row[] = implode("|", $imageUrls);
 
 
         foreach ($attributeCodes as $attributeCode) {
