@@ -161,8 +161,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         ];
 
         $imageUrls = [];
-        foreach ($product->getMediaGalleryImages() as $image) {
-            $imageUrls[] = $image->getUrl();
+        if (is_array($product->getMediaGalleryImages())) {
+            foreach ($product->getMediaGalleryImages() as $image) {
+                $imageUrls[] = $image->getUrl();
+            }
         }
         $row[] = implode("|", $imageUrls);
 
