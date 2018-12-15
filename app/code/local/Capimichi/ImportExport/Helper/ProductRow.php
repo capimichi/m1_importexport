@@ -170,7 +170,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
 
         foreach ($attributeCodes as $attributeCode) {
-            $row[] = $product->getData($attributeCode);
+            $row[] = $product->getAttributeText($attributeCode);
         }
 
         return $row;
