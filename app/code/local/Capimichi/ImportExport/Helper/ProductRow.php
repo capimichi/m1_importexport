@@ -122,8 +122,6 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             "gestisci_quantità",
             "quantità",
             "immagini",
-            "testo_magazzino",
-            "testo_no_magazzino",
             "genitore",
         ];
 
