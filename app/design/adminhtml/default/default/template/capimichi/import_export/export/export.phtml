@@ -28,6 +28,17 @@
     <br>
 
     <div>
+        <h2>Immagini</h2>
+        <label>
+            Includi Immagini
+            <input type="checkbox" name="images" value="1"/>
+        </label>
+    </div>
+
+    <br>
+
+    <div>
+        <h2>Attributi</h2>
         <?php
         $attributes = Mage::getSingleton('eav/config')
             ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
