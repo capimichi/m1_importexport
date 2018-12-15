@@ -136,6 +136,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
 
+        $attributes = Mage::getSingleton('eav/config')
+            ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
+            ->getAttributeCollection()
+            ->addSetInfo();
+
         $imageUrls = [];
         if (count($product->getMediaGalleryImages())) {
             foreach ($product->getMediaGalleryImages() as $image) {
@@ -161,7 +166,23 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
 
         foreach ($attributeCodes as $attributeCode) {
-            $row[] = $product->getAttributeText($attributeCode);
+
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+            foreach ($attributes as $attribute) {
+                if ($attributeCode == $attribute->getName()) {
+
+                    $type = $attribute->getData('frontend_input');
+
+                    switch ($type){
+                        case "select":
+                            $row[] = $product->getAttributeText($attributeCode);
+                            break;
+                        case "text":
+                            $row[] = $product->getData($attributeCode);
+                            break;
+                    }
+                }
+            }
         }
 
         return $row;
