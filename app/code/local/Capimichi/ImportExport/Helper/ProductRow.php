@@ -132,7 +132,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $headers;
     }
 
-    public function simpleProductToRow($product, $attributeCodes)
+    public function simpleProductToRow($product, $attributeCodes, $includeImages = true)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
 
@@ -142,7 +142,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             ->addSetInfo();
 
         $imageUrls = [];
-        if (count($product->getMediaGalleryImages())) {
+        if (count($product->getMediaGalleryImages()) && $includeImages) {
             foreach ($product->getMediaGalleryImages() as $image) {
                 $imageUrls[] = $image->getUrl();
             }
@@ -173,7 +173,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
                     $type = $attribute->getData('frontend_input');
 
-                    switch ($type){
+                    switch ($type) {
                         case "select":
                             $row[] = $product->getAttributeText($attributeCode);
                             break;

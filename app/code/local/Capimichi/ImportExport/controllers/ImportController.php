@@ -47,17 +47,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             "image",
                         ];
 
-                        $hasImage = false;
-                        if (count($product->getMediaGalleryImages())) {
-                            foreach ($product->getMediaGalleryImages() as $image) {
-                                if (md5_file($imageFile) == md5_file($image->getFile())) {
-                                    $hasImage = true;
-                                }
-                            }
-                        }
-                        if (!$hasImage) {
-                            $product->addImageToMediaGallery($imageFile, $imageViews, true, false);
-                        }
+                        $product->addImageToMediaGallery($imageFile, $imageViews, false, false);
                     }
                     $product->save();
                 } catch (\Exception $exception) {

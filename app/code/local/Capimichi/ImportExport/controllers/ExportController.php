@@ -21,6 +21,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
     public function exportAction()
     {
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
+        $includeImages = isset($_POST['images']) ? true : false;
 
         $attributeCodes = [];
         foreach ($_POST as $postKey => $postValue) {
@@ -47,7 +48,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
 
         fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes));
         foreach ($products as $product) {
-            $row = Mage::helper('importexport/ProductRow')->simpleProductToRow($product, $attributeCodes);
+            $row = Mage::helper('importexport/ProductRow')->simpleProductToRow($product, $attributeCodes, $includeImages);
             fputcsv($f, $row);
         }
         fclose($f);
