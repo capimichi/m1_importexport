@@ -46,7 +46,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             "thumbnail",
                             "image",
                         ];
-                        $product->addImageToMediaGallery($imageFile, $imageViews, false, false);
+                        $product->addImageToMediaGallery($imageFile, $imageViews, true, false);
                     }
                     $product->save();
                 } catch (\Exception $exception) {

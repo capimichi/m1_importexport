@@ -26,8 +26,8 @@ class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
             if (!$stockItem) {
                 $stockItem = \Mage::getModel('cataloginventory/stock_item');
                 $stockItem->assignProduct($product);
-                $stockItem->setData('use_config_manage_stock', 0);
             }
+            $stockItem->setData('use_config_manage_stock', 0);
 
             $stockItem->setData('store_id', 1);
             $stockItem->setData('stock_id', 1);
