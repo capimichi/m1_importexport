@@ -16,9 +16,9 @@ class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
     public function rowToStock($product, $row)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-        $quantity = empty($row[self::QUANTITY_KEY]) ? -1 : intval($row[self::QUANTITY_KEY]);
-        $manageStock = empty($row[self::MANAGE_QUANTITY_KEY]) ? -1 : intval($row[self::MANAGE_QUANTITY_KEY]);
-        $available = empty($row[self::AVAILABLE_KEY]) ? -1 : intval($row[self::AVAILABLE_KEY]);
+        $quantity = (!isset($row[self::QUANTITY_KEY]) || $row[self::QUANTITY_KEY] == "") ? -1 : intval($row[self::QUANTITY_KEY]);
+        $manageStock = (!isset($row[self::MANAGE_QUANTITY_KEY]) || $row[self::QUANTITY_KEY] == "") ? -1 : intval($row[self::MANAGE_QUANTITY_KEY]);
+        $available = (!isset($row[self::AVAILABLE_KEY]) || $row[self::QUANTITY_KEY] == "") ? -1 : intval($row[self::AVAILABLE_KEY]);
 
         if ($product) {
 
