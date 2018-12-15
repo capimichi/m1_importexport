@@ -22,7 +22,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
 
         $response = [
             'status' => 'OK',
-            'files'  => [],
+            'errors' => [],
         ];
 
         if (isset($_FILES['file'])) {
@@ -50,7 +50,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         $hasImage = false;
                         if (count($product->getMediaGalleryImages())) {
                             foreach ($product->getMediaGalleryImages() as $image) {
-                                if (md5(file_get_contents($imageFile)) == md5(file_get_contents($image->getFile()))) {
+                                if (md5_file($imageFile) == md5_file($image->getFile())) {
                                     $hasImage = true;
                                 }
                             }
@@ -61,7 +61,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                     }
                     $product->save();
                 } catch (\Exception $exception) {
-
+                    $response['errors'][] = $exception->getMessage();
                 }
 
                 $rows[] = $product->getId();
