@@ -16,11 +16,9 @@ class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
     public function rowToStock($product, $row)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-//        $sku = empty($row[self::SKU_KEY]) ? "" : $row[self::SKU_KEY];
         $quantity = empty($row[self::QUANTITY_KEY]) ? -1 : $row[self::QUANTITY_KEY];
         $manageStock = empty($row[self::MANAGE_QUANTITY_KEY]) ? -1 : intval($row[self::MANAGE_QUANTITY_KEY]);
         $available = empty($row[self::AVAILABLE_KEY]) ? -1 : intval($row[self::AVAILABLE_KEY]);
-//        $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
 
         if ($product) {
 
@@ -33,16 +31,19 @@ class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
                 $stockItem->setData('use_config_manage_stock', 0);
             }
 
-            if ($quantity != -1) {
-                $stockItem->setData('qty', $quantity);
-            }
-
             if ($manageStock != -1) {
                 $stockItem->setData('manage_stock', $manageStock);
             }
 
-            if ($available != -1) {
-                $stockItem->setData('is_in_stock', $available);
+            if ($stockItem->getManageStock()) {
+
+                if ($quantity != -1) {
+                    $stockItem->setData('qty', $quantity);
+                }
+
+                if ($available != -1) {
+                    $stockItem->setData('is_in_stock', $available);
+                }
             }
 
             return $stockItem;

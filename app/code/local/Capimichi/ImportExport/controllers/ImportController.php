@@ -36,6 +36,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
                 $stockItem->save();
 
+
                 try {
                     $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
                     array_reverse($imageFiles);
