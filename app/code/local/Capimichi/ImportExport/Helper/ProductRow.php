@@ -40,6 +40,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
     public function setConfigurableProductUsedAttributes($product, $rows)
     {
+        $product = \Mage::getModel('catalog/product')->load($product->getId());
+
+        $product->setCanSaveConfigurableAttributes(true);
+        $product->setCanSaveCustomOptions(true);
+
         $attributeCodes = [];
         foreach ($rows as $row) {
             foreach ($row as $fieldName => $fieldValue) {
@@ -53,6 +58,13 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
         }, $attributeCodes);
         $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
+        return $product;
+    }
+
+    public function setConfigurableData($product, $rows)
+    {
+        $product = \Mage::getModel('catalog/product')->load($product->getId());
+
         return $product;
     }
 
