@@ -190,6 +190,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             ) {
 
                 $attributeName = preg_replace("/^att_/is", '', $key);
+                $attributeName = preg_replace("/^attv_/is", '', $attributeName);
 
                 $type = null;
                 /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
