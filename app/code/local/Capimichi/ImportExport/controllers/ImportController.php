@@ -30,20 +30,20 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $rows = [];
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
-//                switch (Mage::helper('importexport/ProductRow')->getRowProductType($row)) {
-//                    case "simple":
                 $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
                 $product->save();
-//                        break;
-//                    case "configurable":
-//                        $product = Mage::helper('importexport/ProductRow')->rowToConfigurableProduct($row);
-//                        $product->save();
-//                        break;
-//                }
+
+                if (Mage::helper('importexport/StockRow')->getRowProductType($row) == "configurable") {
+                    $childRows = [];
+                    foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
+                        if (Mage::helper('importexport/StockRow')->getRowProductParentSku($childRow) == $product->getSku()) {
+                            $childRows[] = $childRow;
+                        }
+                    }
+                }
 
                 $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
                 $stockItem->save();
-
 
                 try {
                     $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);

@@ -18,6 +18,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const ATTRIBUTE_SET_KEY = "set_attributi";
     const META_TITLE_KEY = "meta_titolo";
     const META_DESCRIPTION_KEY = "meta_descrizione";
+    const PARENT_SKU_KEY = "genitore";
 
     /**
      * @param $row
@@ -25,7 +26,33 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      */
     public function getRowProductType($row)
     {
-        return $row['TYPE_KEY'];
+        return isset($row['TYPE_KEY']) ? $row['TYPE_KEY'] : 'simple';
+    }
+
+    /**
+     * @param $row
+     * @return mixed
+     */
+    public function getRowProductParentSku($row)
+    {
+        return isset($row['PARENT_SKU_KEY']) ? $row['PARENT_SKU_KEY'] : null;
+    }
+
+    /**
+     * @param $rows
+     * @return array
+     */
+    public function getConfigurableAttributeCodes($rows)
+    {
+        $attributeCodes = [];
+        foreach ($rows as $row) {
+            foreach ($row as $fieldName => $fieldValue) {
+                if (preg_match("/^attv_/is", $fieldName) && $fieldValue != "") {
+                    $attributeCodes[] = preg_replace("/^attv_/is", "", $fieldName);
+                }
+            }
+        }
+        return array_unique($attributeCodes);
     }
 
     /**
