@@ -38,11 +38,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return isset($row['PARENT_SKU_KEY']) ? $row['PARENT_SKU_KEY'] : null;
     }
 
-    /**
-     * @param $rows
-     * @return array
-     */
-    public function getConfigurableAttributeCodes($rows)
+    public function setConfigurableProductUsedAttributes($product, $rows)
     {
         $attributeCodes = [];
         foreach ($rows as $row) {
@@ -52,8 +48,29 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 }
             }
         }
-        return array_unique($attributeCodes);
+        $attributeCodes = array_unique($attributeCodes);
+        $attributeIds = array_map(function ($code) {
+            return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
+        }, $attributeCodes);
+        $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
     }
+
+//    /**
+//     * @param $rows
+//     * @return array
+//     */
+//    public function getConfigurableAttributeCodes($rows)
+//    {
+//        $attributeCodes = [];
+//        foreach ($rows as $row) {
+//            foreach ($row as $fieldName => $fieldValue) {
+//                if (preg_match("/^attv_/is", $fieldName) && $fieldValue != "") {
+//                    $attributeCodes[] = preg_replace("/^attv_/is", "", $fieldName);
+//                }
+//            }
+//        }
+//        return array_unique($attributeCodes);
+//    }
 
     /**
      * @param $row
