@@ -78,9 +78,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $product->setCanSaveConfigurableAttributes(true);
         $product->setCanSaveCustomOptions(true);
 
-        $attributeIds = array_map(function ($code) {
-            return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
-        }, $attributeCodes);
+        $attributeIds = [];
+
+        foreach ($attributeCodes as $attributeCode) {
+            $attributeIds[] = \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
+        }
 
         $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
         $product->setConfigurableAttributesData($product->getTypeInstance()->getConfigurableAttributesAsArray());
@@ -126,23 +128,6 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $product;
     }
 
-//    /**
-//     * @param $rows
-//     * @return array
-//     */
-//    public function getConfigurableAttributeCodes($rows)
-//    {
-//        $attributeCodes = [];
-//        foreach ($rows as $row) {
-//            foreach ($row as $fieldName => $fieldValue) {
-//                if (preg_match("/^attv_/is", $fieldName) && $fieldValue != "") {
-//                    $attributeCodes[] = preg_replace("/^attv_/is", "", $fieldName);
-//                }
-//            }
-//        }
-//        return array_unique($attributeCodes);
-//    }
-
     /**
      * @param $row
      * @return mixed
@@ -185,8 +170,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         foreach ($row as $key => $value) {
 
             if (
-                substr($key, 0, 4) == "att_"
-                || substr($key, 0, 4) == "attv_"
+                preg_match("/^att_/is", $key)
+                || preg_match("/^attv_/is", $key)
             ) {
 
                 $attributeName = preg_replace("/^att_/is", '', $key);
@@ -211,6 +196,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
 
+        if ($title == "") {
+            $title = ".";
+        }
         $product->setName($title);
         $product->setStatus($status);
         $product->setWeight($weight);
@@ -219,6 +207,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         }
         $product->setTaxClassId($taxClassId);
         $product->setVisibility($visibility);
+
+        if ($description == "") {
+            $description = ".";
+        }
         $product->setDescription($description);
         $product->setPrice($price);
         if ($specialPrice) {

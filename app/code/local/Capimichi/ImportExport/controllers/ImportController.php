@@ -28,24 +28,13 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         if (isset($_FILES['file'])) {
             $filePath = $_FILES['file']['tmp_name'];
             $rows = [];
+
+            // In questo ciclo tutti i prodotti (semplici e configurabili)
+            // vengono creati, però ancora non viene definita l'associazione
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
                 $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
                 $product->save();
-
-                if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
-
-                    $childRows = [];
-                    foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
-                        if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
-                            $childRows[] = $childRow;
-                        }
-                    }
-                    $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $childRows);
-                    $product->save();
-                    $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows);
-                    $product->save();
-                }
 
                 $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
                 $stockItem->save();
@@ -70,6 +59,39 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 $rows[] = $product->getId();
             }
             $response['products'] = $rows;
+
+            // In questo ciclo viene definita l'associazione tra prodotti
+            // configurabili e rispettive variazioni
+            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
+
+                    $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('importexport/ProductRow')->getRowProductSku($row));
+
+                    $childRows = [];
+                    foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
+                        if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
+                            $childRows[] = $childRow;
+                        }
+                    }
+
+                    $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($childRows);
+
+                    $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
+                    try {
+                        $product->save();
+                    } catch (\Exception $exception) {
+                        $response['errors'][] = $exception->getMessage();
+                    }
+
+                    $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
+                    try {
+                        $product->save();
+                    } catch (\Exception $exception) {
+                        $response['errors'][] = $exception->getMessage();
+                    }
+                }
+            }
+
         } else {
             $response['MISSING FILE'];
         }
