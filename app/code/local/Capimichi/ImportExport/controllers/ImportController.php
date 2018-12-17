@@ -63,6 +63,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             // In questo ciclo viene definita l'associazione tra prodotti
             // configurabili e rispettive variazioni
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+
                 if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
 
                     $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('importexport/ProductRow')->getRowProductSku($row));
@@ -89,6 +90,9 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                     } catch (\Exception $exception) {
                         $response['errors'][] = $exception->getMessage();
                     }
+
+                    $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
+                    $stockItem->save();
                 }
             }
 
