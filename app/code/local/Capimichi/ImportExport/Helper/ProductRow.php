@@ -57,7 +57,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $attributeIds = array_map(function ($code) {
             return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
         }, $attributeCodes);
+
         $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
+        $product->setConfigurableAttributesData($product->getTypeInstance()->getConfigurableAttributesAsArray());
+
         return $product;
     }
 

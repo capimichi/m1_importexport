@@ -43,6 +43,8 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                     }
                     $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $childRows);
                     $product->save();
+                    $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows);
+                    $product->save();
                 }
 
                 $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
