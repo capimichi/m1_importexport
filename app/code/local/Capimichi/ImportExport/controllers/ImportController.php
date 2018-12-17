@@ -33,15 +33,15 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
                 $product->save();
 
-                if (Mage::helper('importexport/StockRow')->getRowProductType($row) == "configurable") {
+                if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
 
                     $childRows = [];
                     foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
-                        if (Mage::helper('importexport/StockRow')->getRowProductParentSku($childRow) == $product->getSku()) {
+                        if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
                             $childRows[] = $childRow;
                         }
                     }
-                    Mage::helper('importexport/StockRow')->setConfigurableProductUsedAttributes($product, $childRows);
+                    Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $childRows);
                     $product->save();
                 }
 
