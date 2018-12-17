@@ -26,7 +26,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      */
     public function getRowProductType($row)
     {
-        return isset($row['TYPE_KEY']) ? $row['TYPE_KEY'] : 'simple';
+        return isset($row[self::TYPE_KEY]) ? $row[self::TYPE_KEY] : 'simple';
     }
 
     /**
@@ -35,7 +35,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      */
     public function getRowProductParentSku($row)
     {
-        return isset($row['PARENT_SKU_KEY']) ? $row['PARENT_SKU_KEY'] : null;
+        return isset($row[self::PARENT_SKU_KEY]) ? $row[self::PARENT_SKU_KEY] : null;
     }
 
     public function setConfigurableProductUsedAttributes($product, $rows)
@@ -53,7 +53,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
         }, $attributeCodes);
         $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
-        return $attributeIds;
+        return $product;
     }
 
 //    /**
