@@ -2,6 +2,7 @@
 
 class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 {
+    const TYPE_KEY = "tipo";
     const TITLE_KEY = "titolo";
     const SKU_KEY = "riferimento";
     const STATUS_KEY = "attivo";
@@ -22,9 +23,19 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      * @param $row
      * @return mixed
      */
-    public function rowToSimpleProduct($row)
+    public function getRowProductType($row)
+    {
+        return $row['TYPE_KEY'];
+    }
+
+    /**
+     * @param $row
+     * @return mixed
+     */
+    public function rowToProduct($row)
     {
         $title = empty($row[self::TITLE_KEY]) ? "" : $row[self::TITLE_KEY];
+        $type = empty($row[self::TYPE_KEY]) ? "simple" : $row[self::TYPE_KEY];
         $sku = empty($row[self::SKU_KEY]) ? "" : $row[self::SKU_KEY];
         $status = empty($row[self::STATUS_KEY]) ? 1 : $row[self::STATUS_KEY];
         $weight = empty($row[self::WEIGHT_KEY]) ? 0 : $row[self::WEIGHT_KEY];
@@ -51,7 +62,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product = Mage::getModel('catalog/product');
             $product->setSku($sku);
             $product->setWebsiteIds([1]);
-            $product->setTypeId('simple');
+            $product->setTypeId($type);
             $product->setCreatedAt(strtotime('now'));
             $product->setStoreId(\Mage::app()->getStore()->getId());
         }
