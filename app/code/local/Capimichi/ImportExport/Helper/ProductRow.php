@@ -38,13 +38,21 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return isset($row[self::PARENT_SKU_KEY]) ? $row[self::PARENT_SKU_KEY] : null;
     }
 
-    public function setConfigurableProductUsedAttributes($product, $rows)
+    /**
+     * @param $row
+     * @return mixed
+     */
+    public function getRowProductSku($row)
     {
-        $product = \Mage::getModel('catalog/product')->load($product->getId());
+        return isset($row[self::SKU_KEY]) ? $row[self::SKU_KEY] : null;
+    }
 
-        $product->setCanSaveConfigurableAttributes(true);
-        $product->setCanSaveCustomOptions(true);
-
+    /**
+     * @param $rows
+     * @return array
+     */
+    public function getConfigurableProductUsedAttributeCodes($rows)
+    {
         $attributeCodes = [];
         foreach ($rows as $row) {
             foreach ($row as $fieldName => $fieldValue) {
@@ -54,6 +62,22 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
         $attributeCodes = array_unique($attributeCodes);
+
+        return $attributeCodes;
+    }
+
+    /**
+     * @param $product
+     * @param $attributeCodes
+     * @return Mage_Core_Model_Abstract
+     */
+    public function setConfigurableProductUsedAttributes($product, $attributeCodes)
+    {
+        $product = \Mage::getModel('catalog/product')->load($product->getId());
+
+        $product->setCanSaveConfigurableAttributes(true);
+        $product->setCanSaveCustomOptions(true);
+
         $attributeIds = array_map(function ($code) {
             return \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $code);
         }, $attributeCodes);
@@ -64,9 +88,40 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $product;
     }
 
-    public function setConfigurableData($product, $rows)
+    public function setConfigurableData($product, $rows, $attributeCodes)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
+
+        $configurableProductsData = $product->getConfigurableProductsData();
+
+        foreach ($rows as $row) {
+
+            $variationProduct = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
+            $simpleProductsData = [];
+
+            foreach ($attributeCodes as $attributeCode) {
+
+                $attributeId = \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
+
+                $attributeValue = $row['attv_' . $attributeCode];
+
+                $simpleProductsData[] = [
+                    'label'         => rand(0, 999999),
+                    'attribute_id'  => intval($attributeId),
+                    'value_index'   => $variationProduct->getResource()->getAttribute($attributeCode)->getSource()->getOptionId($attributeValue),
+                    'is_percent'    => 0,
+                    'pricing_value' => floatval($variationProduct->getPrice()),
+                ];
+            }
+
+            $configurableProductsData[$variationProduct->getId()] = $simpleProductsData;
+
+            //            $configurableAttributesData[0]['values'][] = $simpleProductsData;
+
+            $variations[] = $variationProduct;
+        }
+
+        $product->setConfigurableProductsData($configurableProductsData);
 
         return $product;
     }
@@ -129,7 +184,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
         foreach ($row as $key => $value) {
 
-            if (substr($key, 0, 4) == "att_") {
+            if (
+                substr($key, 0, 4) == "att_"
+                || substr($key, 0, 4) == "attv_"
+            ) {
 
                 $attributeName = preg_replace("/^att_/is", '', $key);
 
