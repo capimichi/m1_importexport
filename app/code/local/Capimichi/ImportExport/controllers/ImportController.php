@@ -41,7 +41,8 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             $childRows[] = $childRow;
                         }
                     }
-                    Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $childRows);
+                    $usedIds = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $childRows);
+                    $response['attribute_ids'] = $usedIds;
                     $product->save();
                 }
 
