@@ -285,7 +285,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
         $row = [
             $product->getSku(),
-            "simple",
+            $product->getTypeId(),
             implode("|", $product->getCategoryIds()),
             $product->getDescription(),
             $product->getName(),
