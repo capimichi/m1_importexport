@@ -63,9 +63,8 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                 if ($product->type_id == 'configurable') {
                     $childrenIds = Mage::getModel('catalog/product_type_configurable')
                         ->getChildrenIds($product->getId());
-                    $childrenIds = explode(",", $childrenIds);
+                    $childrenIds = $childrenIds[0];
                     foreach ($childrenIds as $childrenId) {
-                        $childrenId = trim($childrenId);
                         if (!in_array($childrenId, $exportedIds)) {
                             $childProduct = Mage::getModel('catalog/product')->load($childrenId);
                             $exportedIds[] = $childProduct->getId();
