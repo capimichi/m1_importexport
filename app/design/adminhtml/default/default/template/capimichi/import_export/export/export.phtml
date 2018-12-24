@@ -86,7 +86,6 @@
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log(response);
                 var $select = jQuery("#select_page");
                 $select.empty();
                 var $countPages = response.result;
