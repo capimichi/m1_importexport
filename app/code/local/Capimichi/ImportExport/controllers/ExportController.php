@@ -85,6 +85,36 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         header('Content-Length: ' . filesize($filePath));
         readfile($filePath);
         exit();
+    }
 
+    public function pagesAction()
+    {
+        $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
+        $pageSize = 500;
+
+        $attributeCodes = [];
+        foreach ($_POST as $postKey => $postValue) {
+            if (substr($postKey, 0, 4) == "att_") {
+                $attributeCodes[] = preg_replace("/^att_/is", "", $postKey);
+            }
+        }
+
+        $products = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('visibility', 4);
+        if ($manufacturer) {
+            $products
+                ->addAttributeToFilter('manufacturer', array('eq' => $manufacturer));
+        }
+
+        $count = $products->getSize();
+
+        echo json_encode([
+            'result' => ceil($count / $pageSize),
+            'status' => 'OK',
+        ]);
+
+        exit();
     }
 }

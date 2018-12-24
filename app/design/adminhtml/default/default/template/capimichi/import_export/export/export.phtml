@@ -1,6 +1,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-<form id="import_form" method="post"
+<form id="export_form" method="post"
       action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/export"); ?>">
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
@@ -76,4 +76,27 @@
 
 <script>
     $j = jQuery.noConflict();
+
+    $j(function () {
+
+        var $form = $j("#export_form");
+        var formData = new FormData($form[0]);
+
+        $j.ajax({
+            url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/pages"); ?>",
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                console.log(response);
+                $j("body").waitMe("hide");
+            },
+            error: function (request, status, error) {
+                $j("body").waitMe("hide");
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+
+    });
 </script>
