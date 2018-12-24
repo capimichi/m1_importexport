@@ -81,25 +81,22 @@
 
         var $form = $j("#export_form");
         var formData = new FormData($form[0]);
-
         $j.ajax({
             url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/pages"); ?>",
             type: 'POST',
             data: formData,
             success: function (response) {
                 var $select = jQuery("#select_page");
+                $select.empty();
                 var $countPages = response.result;
-                var $newSelectOptions = "";
                 for (var $i = 1; $i <= $countPages; $i++) {
                     var $item = $select.data("template");
                     $item = $item.replace(/{page}/g, $i);
-                    $newSelectOptions += $item;
+                    $select.append($item);
+                    console.log($item);
                 }
-                $select.html($newSelectOptions);
-                $j("body").waitMe("hide");
             },
             error: function (request, status, error) {
-                $j("body").waitMe("hide");
             },
             cache: false,
             contentType: false,
