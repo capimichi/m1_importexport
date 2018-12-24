@@ -89,6 +89,8 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
 
     public function pagesAction()
     {
+        header('Content-Type: application/json');
+
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
         $pageSize = 500;
 
