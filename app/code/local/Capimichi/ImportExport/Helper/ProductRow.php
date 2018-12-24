@@ -232,19 +232,20 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     public function getRowHeader($attributeCodes)
     {
         $headers = [
-            "riferimento",
-            "tipo",
-            "categoria",
-            "descrizione",
-            "titolo",
-            "prezzo",
-            "prezzo_speciale",
-            "attivo",
-            "peso",
-            "gestisci_quantità",
-            "quantità",
-            "immagini",
-            "genitore",
+            self::SKU_KEY,
+            self::TYPE_KEY,
+            self::CATEGORY_KEY,
+            self::DESCRIPTION_KEY,
+            self::TITLE_KEY,
+            self::PRICE_KEY,
+            self::SPECIAL_PRICE_KEY,
+            self::STATUS_KEY,
+            self::WEIGHT_KEY,
+            self::VISIBILITY_KEY,
+            Capimichi_ImportExport_Helper_StockRow::MANAGE_QUANTITY_KEY,
+            Capimichi_ImportExport_Helper_StockRow::QUANTITY_KEY,
+            Capimichi_ImportExport_Helper_ImageRow::IMAGES_KEY,
+            self::PARENT_SKU_KEY,
         ];
 
         foreach ($attributeCodes as $attributeCode) {
@@ -292,6 +293,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->getSpecialPrice(),
             $product->getStatus() == 2 ? 0 : $product->getStatus(),
             $product->getWeight(),
+            $product->getVisibility(),
             $product->getStockItem()->getManageStock() ? 1 : 0,
             $product->getStockItem()->getQty(),
             implode("|", $imageUrls),
