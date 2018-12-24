@@ -27,12 +27,7 @@
         &nbsp;
         <label>
             Pagina
-            <select id="select_page" data-template="<option value='{page}'>{page}</option>" name="page">
-                <?php for ($i = 1; $i < 100; $i++) : ?>
-                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                <?php endfor; ?>
-                <option value>-</option>
-            </select>
+            <select id="select_page" data-template="<option value='{page}'>{page}</option>" name="page"></select>
         </label>
         <input type="submit" value="Esporta">
     </div>
@@ -118,8 +113,5 @@
         $j("#select_manufacturer").on("change", function () {
             refreshPages();
         });
-
-        refreshPages();
-
     });
 </script>
