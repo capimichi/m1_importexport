@@ -270,6 +270,18 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
 
+        $parentSku = "";
+        if ($product->getTypeId() == "simple") {
+            $parentIds = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($product->getId());
+            if (!$parentIds) {
+                $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+            }
+            if (isset($parentIds[0])) {
+                $parent = Mage::getModel('catalog/product')->load($parentIds[0]);
+                $parentSku = $parent->getSku();
+            }
+        }
+
         $row = [
             $product->getSku(),
             "simple",
@@ -283,7 +295,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->getStockItem()->getManageStock() ? 1 : 0,
             $product->getStockItem()->getQty(),
             implode("|", $imageUrls),
-            "genitore",
+            $parentSku,
         ];
 
 
