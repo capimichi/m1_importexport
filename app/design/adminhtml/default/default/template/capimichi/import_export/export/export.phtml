@@ -81,7 +81,7 @@
 
     function refreshPages() {
         var $select = jQuery("#select_page");
-        $select.waitMe({
+        jQuery("body").waitMe({
             effect: 'pulse',
             text: 'Import...',
             bg: 'rgba(51,51,51,0.8)',
@@ -101,10 +101,10 @@
                     $item = $item.replace(/{page}/g, $i);
                     $select.append($item);
                 }
-                $select.waitMe("hide");
+                jQuery("body").waitMe("hide");
             },
             error: function (request, status, error) {
-                $select.waitMe("hide");
+                jQuery("body").waitMe("hide");
             },
             cache: false,
             contentType: false,
