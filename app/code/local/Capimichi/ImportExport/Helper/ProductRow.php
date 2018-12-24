@@ -254,7 +254,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $headers;
     }
 
-    public function simpleProductToRow($product, $attributeCodes, $includeImages = true)
+    public function productToRow($product, $attributeCodes, $includeImages = true)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
 
