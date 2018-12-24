@@ -1,4 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/vadimsva/waitMe/waitMe.min.js"></script>
 
 <form id="export_form" method="post"
       action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/export"); ?>">
@@ -79,6 +80,13 @@
     $j = jQuery.noConflict();
 
     function refreshPages() {
+        var $select = jQuery("#select_page");
+        $select.waitMe({
+            effect: 'pulse',
+            text: 'Import...',
+            bg: 'rgba(51,51,51,0.8)',
+            color: '#ffffff'
+        });
         var $form = $j("#export_form");
         var formData = new FormData($form[0]);
         $j.ajax({
@@ -86,17 +94,17 @@
             type: 'POST',
             data: formData,
             success: function (response) {
-                var $select = jQuery("#select_page");
                 $select.empty();
                 var $countPages = response.result;
                 for (var $i = 1; $i <= $countPages; $i++) {
                     var $item = $select.data("template");
                     $item = $item.replace(/{page}/g, $i);
                     $select.append($item);
-                    console.log($item);
                 }
+                $select.waitMe("hide");
             },
             error: function (request, status, error) {
+                $select.waitMe("hide");
             },
             cache: false,
             contentType: false,
