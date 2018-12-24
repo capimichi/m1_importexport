@@ -25,7 +25,7 @@
         &nbsp;
         <label>
             Pagina
-            <select name="page">
+            <select id="select_page" data-template="<option value='{page}'>{page}</option>" name="page">
                 <?php for ($i = 1; $i < 100; $i++) : ?>
                     <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                 <?php endfor; ?>
@@ -87,7 +87,15 @@
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log(response);
+                var $select = jQuery("#select_page");
+                var $countPages = response.result;
+                var $newSelectOptions = "";
+                for (var $i = 1; $i <= $countPages; $i++) {
+                    var $item = $select.data("template");
+                    $item = $item.replace(/{page}/g, $i);
+                    $newSelectOptions += $item;
+                }
+                $select.html($newSelectOptions);
                 $j("body").waitMe("hide");
             },
             error: function (request, status, error) {
