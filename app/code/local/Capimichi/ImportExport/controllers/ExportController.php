@@ -111,9 +111,13 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         }
 
         $count = $products->getSize();
+        $pages = ceil($count / $pageSize);
+        if (!$pages) {
+            $pages = 1;
+        }
 
         echo json_encode([
-            'result' => ceil($count / $pageSize),
+            'result' => $pages,
             'status' => 'OK',
         ]);
 
