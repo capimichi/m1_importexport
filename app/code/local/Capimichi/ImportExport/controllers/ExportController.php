@@ -22,6 +22,8 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
     {
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
         $includeImages = isset($_POST['images']) ? true : false;
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 500;
 
         $attributeCodes = [];
         foreach ($_POST as $postKey => $postValue) {
@@ -39,7 +41,10 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
 
         $products = Mage::getModel('catalog/product')
             ->getCollection()
-            ->addAttributeToSelect('*');
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('visibility', 4)
+            ->setPageSize($pageSize)
+            ->setCurPage($page);
 
         if ($manufacturer) {
             $products

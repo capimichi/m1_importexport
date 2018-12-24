@@ -22,6 +22,16 @@
                 ?>
             </select>
         </label>
+        &nbsp;
+        <label>
+            Pagina
+            <select name="page">
+                <?php for ($i = 1; $i < 100; $i++) : ?>
+                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                <?php endfor; ?>
+                <option value>-</option>
+            </select>
+        </label>
         <input type="submit" value="Esporta">
     </div>
 
