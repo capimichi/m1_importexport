@@ -7,7 +7,7 @@
     <div>
         <label>
             Marca
-            <select name="manufacturer">
+            <select id="select_manufacturer" name="manufacturer">
                 <option value>-</option>
                 <?php
                 $attribute = Mage::getSingleton('eav/config')
@@ -75,10 +75,10 @@
 </style>
 
 <script>
+
     $j = jQuery.noConflict();
 
-    $j(function () {
-
+    function refreshPages() {
         var $form = $j("#export_form");
         var formData = new FormData($form[0]);
         $j.ajax({
@@ -102,6 +102,15 @@
             contentType: false,
             processData: false
         });
+    }
+
+    $j(function () {
+
+        $j("#select_manufacturer").on("change", function () {
+            refreshPages();
+        });
+
+        refreshPages();
 
     });
 </script>
