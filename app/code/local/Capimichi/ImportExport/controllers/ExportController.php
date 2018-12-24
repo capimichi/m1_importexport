@@ -61,16 +61,18 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                 fputcsv($f, $row);
 
                 if ($product->type_id == 'configurable') {
-                    if ($product->getUsedProductCollection()) {
-                        $simpleCollection = $product->getUsedProductCollection()->addAttributeToSelect('*')->addFilterByRequiredOptions();
-                        foreach ($simpleCollection as $childProduct) {
-                            if (!in_array($childProduct->getId(), $exportedIds)) {
-                                $exportedIds[] = $childProduct->getId();
-                                $row = Mage::helper('importexport/ProductRow')->productToRow($childProduct, $attributeCodes, $includeImages);
-                                fputcsv($f, $row);
-                            }
+                    $childrenIds = Mage::getModel('catalog/product_type_configurable')
+                        ->getChildrenIds($product->getId());
+
+                    foreach ($childrenIds as $childrenId) {
+                        if (!in_array($childrenId, $exportedIds)) {
+                            $childProduct = Mage::getModel('catalog/product')->load($childrenId);
+                            $exportedIds[] = $childProduct->getId();
+                            $row = Mage::helper('importexport/ProductRow')->productToRow($childProduct, $attributeCodes, $includeImages);
+                            fputcsv($f, $row);
                         }
                     }
+
                 }
             }
         }
