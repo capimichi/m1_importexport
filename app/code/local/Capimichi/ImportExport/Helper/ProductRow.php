@@ -116,7 +116,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
                 $attributeId = \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
 
-                $attributeValue = $row['attv_' . $attributeCode];
+                $attributeValue = $row['att_' . $attributeCode];
 
                 $simpleProductsData[] = [
                     'label'         => rand(0, 999999),
@@ -181,12 +181,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         foreach ($row as $key => $value) {
 
             if (
-                preg_match("/^att_/is", $key)
-                || preg_match("/^attv_/is", $key)
+            preg_match("/^att_/is", $key)
             ) {
 
                 $attributeName = preg_replace("/^att_/is", '', $key);
-                $attributeName = preg_replace("/^attv_/is", '', $attributeName);
 
                 $type = null;
                 /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
