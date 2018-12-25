@@ -17,17 +17,28 @@ class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
 
     public function rowToImages($row)
     {
-        $imageUrls = empty($row[self::IMAGES_KEY]) ? [] : explode("|", $row[self::IMAGES_KEY]);
+        $images = empty($row[self::IMAGES_KEY]) ? [] : explode("|", $row[self::IMAGES_KEY]);
+        $imagesDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . "import" . DIRECTORY_SEPARATOR;
+        if (!file_exists($imagesDir)) {
+            mkdir($imagesDir, 0777, true);
+        }
 
         $imagePaths = [];
 
-        foreach ($imageUrls as $imageUrl) {
+        foreach ($images as $image) {
 
             $slug = implode("_", [
                 'cmimportimage',
-                md5($imageUrl),
+                md5($image),
             ]);
-            $content = file_get_contents($imageUrl);
+
+            if (
+                !preg_match("/^http:\/\//is", $image)
+                && !preg_match("/^https:\/\//is", $image)
+            ) {
+                $image = $imagesDir . ltrim($image, "/");
+            }
+            $content = file_get_contents($image);
             $tempImagePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $slug;
             file_put_contents($tempImagePath, $content);
             $info = getimagesize($tempImagePath);

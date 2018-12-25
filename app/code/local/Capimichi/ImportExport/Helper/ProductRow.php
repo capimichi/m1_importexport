@@ -180,9 +180,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 
         foreach ($row as $key => $value) {
 
-            if (
-            preg_match("/^att_/is", $key)
-            ) {
+            if (preg_match("/^att_/is", $key)) {
 
                 $attributeName = preg_replace("/^att_/is", '', $key);
 
