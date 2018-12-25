@@ -19,6 +19,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const META_TITLE_KEY = "meta_titolo";
     const META_DESCRIPTION_KEY = "meta_descrizione";
     const PARENT_SKU_KEY = "genitore";
+    const CONFIGURABLE_ATTRIBUTES_KEY = "attributi_variazioni";
 
     /**
      * @param $row
@@ -245,6 +246,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             Capimichi_ImportExport_Helper_StockRow::MANAGE_QUANTITY_KEY,
             Capimichi_ImportExport_Helper_StockRow::QUANTITY_KEY,
             Capimichi_ImportExport_Helper_ImageRow::IMAGES_KEY,
+            self::CONFIGURABLE_ATTRIBUTES_KEY,
             self::PARENT_SKU_KEY,
         ];
 
@@ -270,6 +272,13 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 $imageUrls[] = $image->getUrl();
             }
         }
+
+        $usedProductAttributeCodes = [];
+        $usedProductAttributes = $product->getTypeInstance()->getUsedProductAttributes($product);
+        foreach ($usedProductAttributes as $attribute) {
+            $usedProductAttributeCodes[] = $attribute->getAttributeCode();
+        }
+
 
         $parentSku = "";
         if ($product->getTypeId() == "simple") {
@@ -297,6 +306,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->getStockItem()->getManageStock() ? 1 : 0,
             $product->getStockItem()->getQty(),
             implode("|", $imageUrls),
+            implode("|", $usedProductAttributeCodes),
             $parentSku,
         ];
 
