@@ -49,16 +49,26 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param $rows
+     * @param $row
      * @return array
      */
-    public function getConfigurableProductUsedAttributeCodes($rows)
+    public function getConfigurableProductUsedAttributeCodes($row)
+    {
+        return isset($row[self::CONFIGURABLE_ATTRIBUTES_KEY]) ? explode("|", $row[self::CONFIGURABLE_ATTRIBUTES_KEY]) : [];
+    }
+
+    /**
+     * @param $products
+     * @return array
+     */
+    public function getProductsUsedAttributeCodes($products)
     {
         $attributeCodes = [];
-        foreach ($rows as $row) {
-            foreach ($row as $fieldName => $fieldValue) {
-                if (preg_match("/^attv_/is", $fieldName) && $fieldValue != "") {
-                    $attributeCodes[] = preg_replace("/^attv_/is", "", $fieldName);
+        foreach ($products as $product) {
+            if ($product->type_id == 'configurable') {
+                $usedProductAttributes = $product->getTypeInstance()->getUsedProductAttributes($product);
+                foreach ($usedProductAttributes as $attribute) {
+                    $attributeCodes[] = $attribute->getAttributeCode();
                 }
             }
         }

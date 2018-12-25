@@ -52,11 +52,13 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         }
 
         $exportedIds = [];
+        $attributeCodes = array_merge($attributeCodes, Mage::helper('importexport/ProductRow')->getProductsUsedAttributeCodes($products));
 
         fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes));
         foreach ($products as $product) {
             if (!in_array($product->getId(), $exportedIds)) {
                 $exportedIds[] = $product->getId();
+
                 $row = Mage::helper('importexport/ProductRow')->productToRow($product, $attributeCodes, $includeImages);
                 fputcsv($f, $row);
 

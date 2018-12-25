@@ -75,7 +75,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         }
                     }
 
-                    $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($childRows);
+                    $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($row);
 
                     $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
                     try {
