@@ -274,9 +274,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         }
 
         $usedProductAttributeCodes = [];
-        $usedProductAttributes = $product->getTypeInstance()->getUsedProductAttributes($product);
-        foreach ($usedProductAttributes as $attribute) {
-            $usedProductAttributeCodes[] = $attribute->getAttributeCode();
+        if ($product->getTypeId() == "configurable") {
+            $usedProductAttributes = $product->getTypeInstance()->getUsedProductAttributes($product);
+            foreach ($usedProductAttributes as $attribute) {
+                $usedProductAttributeCodes[] = $attribute->getAttributeCode();
+            }
         }
 
 
