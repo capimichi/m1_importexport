@@ -199,6 +199,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                     case "text":
                         $product->setData($attributeName, $value);
                         break;
+                    default:
+                        $product->setData($attributeName, $value);
+                        break;
                 }
             }
         }
