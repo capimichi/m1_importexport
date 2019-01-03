@@ -334,6 +334,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                         case "text":
                             $row[] = $product->getData($attributeCode);
                             break;
+                        default:
+                            $row[] = $product->getData($attributeCode);
+                            break;
                     }
                 }
             }

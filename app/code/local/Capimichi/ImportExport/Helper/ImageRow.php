@@ -36,9 +36,14 @@ class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
                 !preg_match("/^http:\/\//is", $image)
                 && !preg_match("/^https:\/\//is", $image)
             ) {
+                $content = "";
                 $image = $imagesDir . ltrim($image, "/");
+                if (file_exists($image)) {
+                    $content = file_get_contents($image);
+                }
+            } else {
+                $content = file_get_contents($image);
             }
-            $content = file_get_contents($image);
             $tempImagePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $slug;
             file_put_contents($tempImagePath, $content);
             $info = getimagesize($tempImagePath);
