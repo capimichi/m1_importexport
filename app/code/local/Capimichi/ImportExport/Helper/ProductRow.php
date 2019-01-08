@@ -94,9 +94,13 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     public function changeSku($row)
     {
         $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
-        $newSku = $this->getRowNewSku($row);
-        $product->setSku($newSku);
-        return $product;
+        if($product) {
+            $newSku = $this->getRowNewSku($row);
+            $product->setSku($newSku);
+            return $product;
+        } else{
+            return null;
+        }
     }
 
     /**

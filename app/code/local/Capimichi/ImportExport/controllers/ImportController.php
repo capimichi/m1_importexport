@@ -105,7 +105,13 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                     if (Mage::helper('importexport/ProductRow')->getRowNewSku($row)) {
 
                         $product = Mage::helper('importexport/ProductRow')->changeSku($row);
-                        $product->save();
+                        if ($product) {
+                            try {
+                                $product->save();
+                            } catch (\Exception $exception) {
+                                $response['errors'][] = $exception->getMessage();
+                            }
+                        }
                     }
                 }
             }
