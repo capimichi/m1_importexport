@@ -62,6 +62,10 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         ];
                     }
 
+                    $tProduct = Mage::helper('importexport/ProductRow')->translateproduct($product, $row);
+
+                    $tProduct->save();
+
                     $rows[] = $product->getId();
                 }
                 $response['products'] = $rows;

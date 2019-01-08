@@ -21,6 +21,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const META_DESCRIPTION_KEY = "meta_descrizione";
     const PARENT_SKU_KEY = "genitore";
     const CONFIGURABLE_ATTRIBUTES_KEY = "attributi_variazioni";
+    const TRANSLATE_TITLE_KEY = "titolo_{langkey}";
+    const TRANSLATE_DESCRIPTION_KEY = "descrizione_{langkey}";
 
     /**
      * @param $row
@@ -94,11 +96,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     public function changeSku($row)
     {
         $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
-        if($product) {
+        if ($product) {
             $newSku = $this->getRowNewSku($row);
             $product->setSku($newSku);
             return $product;
-        } else{
+        } else {
             return null;
         }
     }
@@ -163,6 +165,35 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $product->setConfigurableProductsData($configurableProductsData);
 
         return $product;
+    }
+
+    public function translateproduct($product, $row)
+    {
+        $langCodes = [
+            "en",
+        ];
+
+        $product = \Mage::getModel('catalog/product')->load($product->getId());
+
+        foreach ($langCodes as $langCode) {
+            $store = \Mage::getModel('core/store')->load($langCode, 'code');
+            if ($store) {
+                $storeId = $store->getId();
+                $product->setStoreId($storeId);
+                $titleKey = str_replace("{langkey}", $langCode, self::TRANSLATE_TITLE_KEY);
+                if (isset($row[$titleKey])) {
+                    $title = $row[$titleKey];
+                    $product->setName($title);
+                }
+                $descriptionKey = str_replace("{langkey}", $langCode, self::TRANSLATE_DESCRIPTION_KEY);
+                if (isset($row[$descriptionKey])) {
+                    $description = $row[$descriptionKey];
+                    $product->setDescription($description);
+                }
+            }
+        }
+        return $product;
+
     }
 
     /**
