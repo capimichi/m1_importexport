@@ -5,7 +5,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const TYPE_KEY = "tipo";
     const TITLE_KEY = "titolo";
     const SKU_KEY = "riferimento";
-    const NEW_SKU_KEY = "nuovo riferimento";
+    const NEW_SKU_KEY = "q";
     const STATUS_KEY = "attivo";
     const WEIGHT_KEY = "peso";
     const HEIGHT_KEY = "altezza";
@@ -181,12 +181,12 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 $storeId = $store->getId();
                 $product->setStoreId($storeId);
                 $titleKey = str_replace("{langkey}", $langCode, self::TRANSLATE_TITLE_KEY);
-                if (isset($row[$titleKey])) {
+                if (!empty($row[$titleKey])) {
                     $title = $row[$titleKey];
                     $product->setName($title);
                 }
                 $descriptionKey = str_replace("{langkey}", $langCode, self::TRANSLATE_DESCRIPTION_KEY);
-                if (isset($row[$descriptionKey])) {
+                if (!empty($row[$descriptionKey])) {
                     $description = $row[$descriptionKey];
                     $product->setDescription($description);
                 }
