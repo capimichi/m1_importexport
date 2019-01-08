@@ -96,6 +96,16 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 }
             }
 
+            // Ciclo per i nuovi sku
+            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+
+                if (Mage::helper('importexport/ProductRow')->getRowNewSku()) {
+
+                    $product = Mage::helper('importexport/ProductRow')->changeSku($row);
+                    $product->save();
+                }
+            }
+
         } else {
             $response['MISSING FILE'];
         }

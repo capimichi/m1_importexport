@@ -5,6 +5,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const TYPE_KEY = "tipo";
     const TITLE_KEY = "titolo";
     const SKU_KEY = "riferimento";
+    const NEW_SKU_KEY = "nuovo riferimento";
     const STATUS_KEY = "attivo";
     const WEIGHT_KEY = "peso";
     const HEIGHT_KEY = "altezza";
@@ -20,6 +21,15 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const META_DESCRIPTION_KEY = "meta_descrizione";
     const PARENT_SKU_KEY = "genitore";
     const CONFIGURABLE_ATTRIBUTES_KEY = "attributi_variazioni";
+
+    /**
+     * @param $row
+     * @return mixed
+     */
+    public function getRowNewSku($row)
+    {
+        return isset($row[self::NEW_SKU_KEY]) ? $row[self::NEW_SKU_KEY] : null;
+    }
 
     /**
      * @param $row
@@ -75,6 +85,18 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $attributeCodes = array_unique($attributeCodes);
 
         return $attributeCodes;
+    }
+
+    /**
+     * @param $row
+     * @return mixed
+     */
+    public function changeSku($row)
+    {
+        $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
+        $newSku = $this->getRowNewSku($row);
+        $product->setSku($newSku);
+        return $product;
     }
 
     /**
