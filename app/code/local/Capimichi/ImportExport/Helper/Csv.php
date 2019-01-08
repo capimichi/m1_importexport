@@ -16,9 +16,21 @@ class Capimichi_ImportExport_Helper_Csv extends Mage_Core_Helper_Abstract
             foreach ($headers as $key => $headerName) {
                 $item[$headerName] = $row[$key];
             }
-            if(!feof($f)) {
+            if (!feof($f)) {
                 yield $item;
             }
         }
+    }
+
+    /**
+     * @param $csvPath
+     * @return array
+     */
+    public function getHeaders($csvPath)
+    {
+        $f = fopen($csvPath, "r");
+        $headers = fgetcsv($f);
+        fclose($f);
+        return $headers;
     }
 }

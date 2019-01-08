@@ -28,81 +28,85 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         if (isset($_FILES['file'])) {
             $filePath = $_FILES['file']['tmp_name'];
             $rows = [];
+            $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
 
-            // In questo ciclo tutti i prodotti (semplici e configurabili)
-            // vengono creati, però ancora non viene definita l'associazione
-            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+            if (!isset($headers[Capimichi_ImportExport_Helper_ProductRow::NEW_SKU_KEY])) {
+                // In questo ciclo tutti i prodotti (semplici e configurabili)
+                // vengono creati, però ancora non viene definita l'associazione
+                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
-                $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
-                $product->save();
-
-                $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
-                $stockItem->save();
-
-                try {
-                    $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
-                    array_reverse($imageFiles);
-                    foreach ($imageFiles as $imageFile) {
-                        $imageViews = [
-                            "small_image",
-                            "thumbnail",
-                            "image",
-                        ];
-
-                        $product->addImageToMediaGallery($imageFile, $imageViews, false, false);
-                    }
+                    $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
                     $product->save();
-                } catch (\Exception $exception) {
-                    $response['errors'][] = $exception->getMessage();
-                }
-
-                $rows[] = $product->getId();
-            }
-            $response['products'] = $rows;
-
-            // In questo ciclo viene definita l'associazione tra prodotti
-            // configurabili e rispettive variazioni
-            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
-
-                if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
-
-                    $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('importexport/ProductRow')->getRowProductSku($row));
-
-                    $childRows = [];
-                    foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
-                        if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
-                            $childRows[] = $childRow;
-                        }
-                    }
-
-                    $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($row);
-
-                    $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
-                    try {
-                        $product->save();
-                    } catch (\Exception $exception) {
-                        $response['errors'][] = $exception->getMessage();
-                    }
-
-                    $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
-                    try {
-                        $product->save();
-                    } catch (\Exception $exception) {
-                        $response['errors'][] = $exception->getMessage();
-                    }
 
                     $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
                     $stockItem->save();
+
+                    try {
+                        $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
+                        array_reverse($imageFiles);
+                        foreach ($imageFiles as $imageFile) {
+                            $imageViews = [
+                                "small_image",
+                                "thumbnail",
+                                "image",
+                            ];
+
+                            $product->addImageToMediaGallery($imageFile, $imageViews, false, false);
+                        }
+                        $product->save();
+                    } catch (\Exception $exception) {
+                        $response['errors'][] = $exception->getMessage();
+                    }
+
+                    $rows[] = $product->getId();
                 }
-            }
+                $response['products'] = $rows;
 
-            // Ciclo per i nuovi sku
-            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                // In questo ciclo viene definita l'associazione tra prodotti
+                // configurabili e rispettive variazioni
+                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
-                if (Mage::helper('importexport/ProductRow')->getRowNewSku($row)) {
+                    if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
 
-                    $product = Mage::helper('importexport/ProductRow')->changeSku($row);
-                    $product->save();
+                        $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('importexport/ProductRow')->getRowProductSku($row));
+
+                        $childRows = [];
+                        foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
+                            if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
+                                $childRows[] = $childRow;
+                            }
+                        }
+
+                        $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($row);
+
+                        $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
+                        try {
+                            $product->save();
+                        } catch (\Exception $exception) {
+                            $response['errors'][] = $exception->getMessage();
+                        }
+
+                        $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
+                        try {
+                            $product->save();
+                        } catch (\Exception $exception) {
+                            $response['errors'][] = $exception->getMessage();
+                        }
+
+                        $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
+                        $stockItem->save();
+                    }
+                }
+            } else {
+
+                // Ciclo per i nuovi sku
+                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+
+                    if (Mage::helper('importexport/ProductRow')->getRowNewSku($row)) {
+
+                        $product = Mage::helper('importexport/ProductRow')->changeSku($row);
+                        $product->save();
+                    }
                 }
             }
 
