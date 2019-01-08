@@ -87,7 +87,11 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         try {
                             $product->save();
                         } catch (\Exception $exception) {
-                            $response['errors'][] = $exception->getMessage();
+                            $response['errors'][] = [
+                                'message' => $exception->getMessage(),
+                                'file'    => $exception->getFile(),
+                                'line'    => $exception->getLine(),
+                            ];
                         }
 
                         $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
