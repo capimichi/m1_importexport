@@ -30,7 +30,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $rows = [];
             $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
 
-            if (!isset($headers[Capimichi_ImportExport_Helper_ProductRow::NEW_SKU_KEY])) {
+            if (!in_array(Capimichi_ImportExport_Helper_ProductRow::NEW_SKU_KEY, $headers)) {
                 // In questo ciclo tutti i prodotti (semplici e configurabili)
                 // vengono creati, però ancora non viene definita l'associazione
                 foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
