@@ -9,8 +9,8 @@
 class Capimichi_ImportExport_Helper_StockRow extends Mage_Core_Helper_Abstract
 {
 //    const SKU_KEY = "riferimento";
-    const QUANTITY_KEY = "quantità";
-    const MANAGE_QUANTITY_KEY = "gestisci_quantità";
+    const QUANTITY_KEY = "quantita";
+    const MANAGE_QUANTITY_KEY = "gestisci_quantita";
     const AVAILABLE_KEY = "disponibile";
 
     public function rowToStock($product, $row)
