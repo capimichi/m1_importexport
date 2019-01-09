@@ -5,7 +5,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     const TYPE_KEY = "tipo";
     const TITLE_KEY = "titolo";
     const SKU_KEY = "riferimento";
-    const NEW_SKU_KEY = "q";
+    const NEW_SKU_KEY = "nuovo riferimento";
     const STATUS_KEY = "attivo";
     const WEIGHT_KEY = "peso";
     const HEIGHT_KEY = "altezza";
@@ -202,23 +202,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      */
     public function rowToProduct($row)
     {
-        $title = empty($row[self::TITLE_KEY]) ? "" : $row[self::TITLE_KEY];
         $type = empty($row[self::TYPE_KEY]) ? "simple" : $row[self::TYPE_KEY];
         $sku = empty($row[self::SKU_KEY]) ? "" : $row[self::SKU_KEY];
-        $status = empty($row[self::STATUS_KEY]) ? 1 : $row[self::STATUS_KEY];
-        $weight = empty($row[self::WEIGHT_KEY]) ? 0 : $row[self::WEIGHT_KEY];
-        $height = empty($row[self::HEIGHT_KEY]) ? 0 : $row[self::HEIGHT_KEY];
-        $taxClassId = empty($row[self::TAX_CLASS_KEY]) ? 5 : $row[self::TAX_CLASS_KEY];
-        $visibility = empty($row[self::VISIBILITY_KEY]) ? 4 : $row[self::VISIBILITY_KEY];
-        $description = empty($row[self::DESCRIPTION_KEY]) ? "" : $row[self::DESCRIPTION_KEY];
-        $shortDescription = empty($row[self::SHORT_DESCRIPTION_KEY]) ? "" : $row[self::SHORT_DESCRIPTION_KEY];
-        $price = empty($row[self::PRICE_KEY]) ? 0 : $row[self::PRICE_KEY];
-        $price = str_replace(",", ".", $price);
-        $specialPrice = empty($row[self::SPECIAL_PRICE_KEY]) ? 0 : $row[self::SPECIAL_PRICE_KEY];
-        $categories = empty($row[self::CATEGORY_KEY]) ? [] : explode("|", $row[self::CATEGORY_KEY]);
-        $attributeSet = empty($row[self::ATTRIBUTE_SET_KEY]) ? 4 : $row[self::ATTRIBUTE_SET_KEY];
-        $metaTitle = empty($row[self::META_TITLE_KEY]) ? "" : $row[self::META_TITLE_KEY];
-        $metaDescription = empty($row[self::META_DESCRIPTION_KEY]) ? "" : $row[self::META_DESCRIPTION_KEY];
 
         $attributes = Mage::getSingleton('eav/config')
             ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
@@ -263,35 +248,52 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
 
-        if ($title == "") {
-            $title = ".";
-        }
-        $product->setName($title);
-        $product->setStatus($status);
-        $product->setWeight($weight);
-        if ($height) {
-            $product->setHeight($height);
-        }
-        $product->setTaxClassId($taxClassId);
-        $product->setVisibility($visibility);
 
-        if ($description == "") {
-            $description = ".";
+        if (isset($row[self::TITLE_KEY])) {
+            $product->setName(empty($row[self::TITLE_KEY]) ? "." : $row[self::TITLE_KEY]);
         }
-        $product->setDescription($description);
-        $product->setPrice($price);
-        if ($specialPrice) {
+        if (isset($row[self::STATUS_KEY])) {
+            $product->setStatus($row[self::STATUS_KEY]);
+        }
+        if (isset($row[self::WEIGHT_KEY])) {
+            $product->setWeight($row[self::WEIGHT_KEY]);
+        }
+        if (isset($row[self::HEIGHT_KEY])) {
+            $product->setHeight($row[self::HEIGHT_KEY]);
+        }
+        if (isset($row[self::TAX_CLASS_KEY])) {
+            $product->setTaxClassId($row[self::TAX_CLASS_KEY]);
+        }
+        if (isset($row[self::VISIBILITY_KEY])) {
+            $product->setVisibility($row[self::VISIBILITY_KEY]);
+        }
+        if (isset($row[self::DESCRIPTION_KEY])) {
+            $product->setDescription(empty($row[self::DESCRIPTION_KEY]) ? "." : $row[self::DESCRIPTION_KEY]);
+        }
+        if (isset($row[self::PRICE_KEY])) {
+            $price = str_replace(",", ".", $row[self::PRICE_KEY]);
+            $product->setPrice($price);
+        }
+        if (isset($row[self::SPECIAL_PRICE_KEY])) {
+            $specialPrice = str_replace(",", ".", $row[self::SPECIAL_PRICE_KEY]);
             $product->setSpecialPrice($specialPrice);
         }
-        $product->setCategoryIds($categories);
-        $product->setDescription($description);
-
-        if ($shortDescription) {
-            $product->setShortDescription($shortDescription);
+        if (isset($row[self::CATEGORY_KEY])) {
+            $categories = explode("|", $row[self::CATEGORY_KEY]);
+            $product->setCategoryIds($categories);
         }
-        $product->setAttributeSetId($attributeSet);
-        $product->setMetaTitle($metaTitle);
-        $product->setMetaDescription($metaDescription);
+        if (isset($row[self::SHORT_DESCRIPTION_KEY])) {
+            $product->setShortDescription($row[self::SHORT_DESCRIPTION_KEY]);
+        }
+        if (isset($row[self::ATTRIBUTE_SET_KEY])) {
+            $product->setAttributeSetId($row[self::ATTRIBUTE_SET_KEY]);
+        }
+        if (isset($row[self::META_TITLE_KEY])) {
+            $product->setMetaTitle($row[self::META_TITLE_KEY]);
+        }
+        if (isset($row[self::META_DESCRIPTION_KEY])) {
+            $product->setMetaDescription($row[self::META_DESCRIPTION_KEY]);
+        }
 
         return $product;
     }
