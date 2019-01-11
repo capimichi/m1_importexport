@@ -151,18 +151,17 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
                     if (Mage::helper('importexport/ProductRow')->getRowNewSku($row)) {
-
-                        $product = Mage::helper('importexport/ProductRow')->changeSku($row);
-                        if ($product) {
-                            try {
+                        try {
+                            $product = Mage::helper('importexport/ProductRow')->changeSku($row);
+                            if ($product) {
                                 $product->save();
-                            } catch (\Exception $exception) {
-                                $response['errors'][] = [
-                                    'message' => $exception->getMessage(),
-                                    'file'    => $exception->getFile(),
-                                    'line'    => $exception->getLine(),
-                                ];
                             }
+                        } catch (\Exception $exception) {
+                            $response['errors'][] = [
+                                'message' => $exception->getMessage(),
+                                'file'    => $exception->getFile(),
+                                'line'    => $exception->getLine(),
+                            ];
                         }
                     }
                 }
