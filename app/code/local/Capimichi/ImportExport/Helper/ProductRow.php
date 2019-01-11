@@ -92,12 +92,21 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     /**
      * @param $row
      * @return mixed
+     *
+     * @throws \Exception
      */
     public function changeSku($row)
     {
         $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
         if ($product) {
             $newSku = $this->getRowNewSku($row);
+
+            $productWithnewSku = \Mage::getModel('catalog/product')->loadByAttribute('sku', $newSku);
+
+            if ($productWithnewSku) {
+                throw  new \Exception("Product with same sku already exists");
+            }
+
             $product->setSku($newSku);
             return $product;
         } else {
