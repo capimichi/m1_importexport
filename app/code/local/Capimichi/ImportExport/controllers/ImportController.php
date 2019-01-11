@@ -27,6 +27,14 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
 
         if (isset($_FILES['file'])) {
             $filePath = $_FILES['file']['tmp_name'];
+
+            $importDirectory = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . "cmimport" . DIRECTORY_SEPARATOR;
+            if (!file_exists($importDirectory)) {
+                mkdir($importDirectory, 0777, true);
+            }
+            $importFile = $importDirectory . date("Y-m-d-H-i-s") . "-" . $_FILES['file']['name'];
+            copy($filePath, $importFile);
+
             $rows = [];
             $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
 
