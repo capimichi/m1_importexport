@@ -44,10 +44,26 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
 
                     $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
-                    $product->save();
+                    try {
+                        $product->save();
+                    } catch (\Exception $exception) {
+                        $response['errors'][] = [
+                            'message' => $exception->getMessage(),
+                            'file'    => $exception->getFile(),
+                            'line'    => $exception->getLine(),
+                        ];
+                    }
 
                     $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
-                    $stockItem->save();
+                    try {
+                        $stockItem->save();
+                    } catch (\Exception $exception) {
+                        $response['errors'][] = [
+                            'message' => $exception->getMessage(),
+                            'file'    => $exception->getFile(),
+                            'line'    => $exception->getLine(),
+                        ];
+                    }
 
                     try {
                         $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
