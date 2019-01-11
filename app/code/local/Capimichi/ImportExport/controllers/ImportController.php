@@ -32,7 +32,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             if (!file_exists($importDirectory)) {
                 mkdir($importDirectory, 0777, true);
             }
-            $importFile = $importDirectory . date("Y-m-d-H-i-s") . "-" . $_FILES['file']['name'];
+            $importFile = $importDirectory . date("Y-m-d-H-i-s") . "-" . str_replace(" ", "", $_FILES['file']['name']);
             copy($filePath, $importFile);
 
             $rows = [];
