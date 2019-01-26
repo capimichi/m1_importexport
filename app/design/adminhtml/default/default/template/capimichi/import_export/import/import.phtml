@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vadimsva/waitMe/waitMe.min.css"/>
 <script src="https://cdn.jsdelivr.net/gh/vadimsva/waitMe/waitMe.min.js"></script>
 
+<h2>Upload prodotti</h2>
 <form id="import_form" method="post" enctype="multipart/form-data">
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
@@ -12,6 +13,19 @@
 
     <input type="submit" value="Importa">
 </form>
+
+<h2>Upload immagini</h2>
+<form id="import_images_form" method="post" enctype="multipart/form-data">
+    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
+
+    <label>
+        Import Immagini
+        <input type="file" name="file">
+    </label>
+
+    <input type="submit" value="Importa immagini">
+</form>
+
 
 <script>
     $j = jQuery.noConflict();
@@ -31,6 +45,35 @@
 
             $j.ajax({
                 url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximport"); ?>",
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    $j("body").waitMe("hide");
+                },
+                error: function (request, status, error) {
+                    $j("body").waitMe("hide");
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+            e.preventDefault();
+        });
+
+        var $formImages = $j("#import_images_form");
+        $formImages.on("submit", function (e) {
+            var formData = new FormData(this);
+            $j("body").waitMe({
+                effect: 'pulse',
+                text: 'Import...',
+                bg: 'rgba(51,51,51,0.8)',
+                color: '#ffffff'
+            });
+
+
+            $j.ajax({
+                url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximportimages"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {

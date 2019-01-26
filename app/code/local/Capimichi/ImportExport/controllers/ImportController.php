@@ -174,4 +174,27 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         echo json_encode($response);
     }
 
+    public function ajaximportimagesAction()
+    {
+        header('Content-Type: application/json');
+
+        $response = [
+            'status' => 'OK',
+            'errors' => [],
+        ];
+
+        if (isset($_FILES['file'])) {
+            $imagesDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . "import" . DIRECTORY_SEPARATOR;
+            if (!file_exists($imagesDir)) {
+                mkdir($imagesDir, 0777, true);
+            }
+
+            $response['files'] = $_FILES;
+
+        } else {
+            $response['MISSING FILES'];
+        }
+
+        echo json_encode($response);
+    }
 }
