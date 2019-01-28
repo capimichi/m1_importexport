@@ -189,7 +189,17 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 mkdir($imagesDir, 0777, true);
             }
 
-            $response['files'] = $_FILES;
+            $fileData = $_FILES['file'];
+            $names = $fileData['name'];
+            $tmpNames = $fileData['tmp_name'];
+
+            for ($i = 0; $i < count($names); $i++) {
+                $name = $names[$i];
+                $tmpName = $tmpNames[$i];
+                move_uploaded_file($tmpName, $imagesDir . $name);
+            }
+
+            $response['file'] = $fileData;
 
         } else {
             $response['MISSING FILES'];
