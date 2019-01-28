@@ -13,14 +13,14 @@
 
     <input type="submit" value="Importa">
 </form>
-<br>
+<p></p>
 <h2>Upload immagini</h2>
 <form id="import_images_form" method="post" enctype="multipart/form-data">
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
     <label>
         Import Immagini
-        <input type="file" name="file">
+        <input type="file" name="file[]" multiple="multiple">
     </label>
 
     <input type="submit" value="Importa immagini">
