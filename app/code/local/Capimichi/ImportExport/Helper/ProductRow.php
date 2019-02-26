@@ -2,75 +2,81 @@
 
 class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
 {
-    const TYPE_KEY = "tipo";
-    const TITLE_KEY = "titolo";
-    const SKU_KEY = "riferimento";
-    const NEW_SKU_KEY = "nuovo riferimento";
-    const STATUS_KEY = "attivo";
-    const WEIGHT_KEY = "peso";
-    const HEIGHT_KEY = "altezza";
-    const TAX_CLASS_KEY = "tassa";
-    const VISIBILITY_KEY = "visibilita";
-    const DESCRIPTION_KEY = "descrizione";
-    const SHORT_DESCRIPTION_KEY = "descrizione_breve";
-    const PRICE_KEY = "prezzo";
-    const SPECIAL_PRICE_KEY = "prezzo_speciale";
-    const CATEGORY_KEY = "categoria";
-    const ATTRIBUTE_SET_KEY = "set_attributi";
-    const META_TITLE_KEY = "meta_titolo";
-    const META_DESCRIPTION_KEY = "meta_descrizione";
-    const PARENT_SKU_KEY = "genitore";
+    const TYPE_KEY                    = "tipo";
+    const TITLE_KEY                   = "titolo";
+    const SKU_KEY                     = "riferimento";
+    const NEW_SKU_KEY                 = "nuovo riferimento";
+    const STATUS_KEY                  = "attivo";
+    const WEIGHT_KEY                  = "peso";
+    const HEIGHT_KEY                  = "altezza";
+    const TAX_CLASS_KEY               = "tassa";
+    const VISIBILITY_KEY              = "visibilita";
+    const DESCRIPTION_KEY             = "descrizione";
+    const SHORT_DESCRIPTION_KEY       = "descrizione_breve";
+    const PRICE_KEY                   = "prezzo";
+    const SPECIAL_PRICE_KEY           = "prezzo_speciale";
+    const CATEGORY_KEY                = "categoria";
+    const ATTRIBUTE_SET_KEY           = "set_attributi";
+    const META_TITLE_KEY              = "meta_titolo";
+    const META_DESCRIPTION_KEY        = "meta_descrizione";
+    const PARENT_SKU_KEY              = "genitore";
     const CONFIGURABLE_ATTRIBUTES_KEY = "attributi_variazioni";
-    const TRANSLATE_TITLE_KEY = "titolo_{langkey}";
-    const TRANSLATE_DESCRIPTION_KEY = "descrizione_{langkey}";
-
+    const TRANSLATE_TITLE_KEY         = "titolo_{langkey}";
+    const TRANSLATE_DESCRIPTION_KEY   = "descrizione_{langkey}";
+    
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function getRowNewSku($row)
     {
         return isset($row[self::NEW_SKU_KEY]) ? $row[self::NEW_SKU_KEY] : null;
     }
-
+    
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function getRowProductType($row)
     {
         return isset($row[self::TYPE_KEY]) ? $row[self::TYPE_KEY] : 'simple';
     }
-
+    
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function getRowProductParentSku($row)
     {
         return isset($row[self::PARENT_SKU_KEY]) ? $row[self::PARENT_SKU_KEY] : null;
     }
-
+    
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function getRowProductSku($row)
     {
         return isset($row[self::SKU_KEY]) ? $row[self::SKU_KEY] : null;
     }
-
+    
     /**
      * @param $row
+     *
      * @return array
      */
     public function getConfigurableProductUsedAttributeCodes($row)
     {
         return isset($row[self::CONFIGURABLE_ATTRIBUTES_KEY]) ? explode("|", $row[self::CONFIGURABLE_ATTRIBUTES_KEY]) : [];
     }
-
+    
     /**
      * @param $products
+     *
      * @return array
      */
     public function getProductsUsedAttributeCodes($products)
@@ -85,12 +91,13 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
         $attributeCodes = array_unique($attributeCodes);
-
+        
         return $attributeCodes;
     }
-
+    
     /**
      * @param $row
+     *
      * @return mixed
      *
      * @throws \Exception
@@ -100,61 +107,62 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
         if ($product) {
             $newSku = $this->getRowNewSku($row);
-
+            
             $productWithnewSku = \Mage::getModel('catalog/product')->loadByAttribute('sku', $newSku);
-
+            
             if ($productWithnewSku) {
                 throw  new \Exception("Product with same sku already exists");
             }
-
+            
             $product->setSku($newSku);
             return $product;
         } else {
             return null;
         }
     }
-
+    
     /**
      * @param $product
      * @param $attributeCodes
+     *
      * @return Mage_Core_Model_Abstract
      */
     public function setConfigurableProductUsedAttributes($product, $attributeCodes)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-
+        
         $product->setCanSaveConfigurableAttributes(true);
         $product->setCanSaveCustomOptions(true);
-
+        
         $attributeIds = [];
-
+        
         foreach ($attributeCodes as $attributeCode) {
             $attributeIds[] = \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
         }
-
+        
         $product->getTypeInstance()->setUsedProductAttributeIds($attributeIds);
         $product->setConfigurableAttributesData($product->getTypeInstance()->getConfigurableAttributesAsArray());
-
+        
         return $product;
     }
-
+    
     public function setConfigurableData($product, $rows, $attributeCodes)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-
+        
         $configurableProductsData = $product->getConfigurableProductsData();
-
+        
         foreach ($rows as $row) {
-
+            
             $variationProduct = \Mage::getModel('catalog/product')->loadByAttribute('sku', $this->getRowProductSku($row));
             $simpleProductsData = [];
-
+            
             foreach ($attributeCodes as $attributeCode) {
-
+                
                 $attributeId = \Mage::getModel('eav/entity_attribute')->getIdByCode('catalog_product', $attributeCode);
-
+                
                 $attributeValue = $row['att_' . $attributeCode];
-
+                
                 $simpleProductsData[] = [
                     'label'         => rand(0, 999999),
                     'attribute_id'  => intval($attributeId),
@@ -163,27 +171,27 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                     'pricing_value' => floatval($variationProduct->getPrice()),
                 ];
             }
-
+            
             $configurableProductsData[$variationProduct->getId()] = $simpleProductsData;
-
+            
             //            $configurableAttributesData[0]['values'][] = $simpleProductsData;
-
+            
             $variations[] = $variationProduct;
         }
-
+        
         $product->setConfigurableProductsData($configurableProductsData);
-
+        
         return $product;
     }
-
+    
     public function translateproduct($product, $row)
     {
         $langCodes = [
             "en",
         ];
-
+        
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-
+        
         foreach ($langCodes as $langCode) {
             $store = \Mage::getModel('core/store')->load($langCode, 'code');
             if ($store) {
@@ -202,23 +210,24 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
         return $product;
-
+        
     }
-
+    
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function rowToProduct($row)
     {
         $type = empty($row[self::TYPE_KEY]) ? "simple" : $row[self::TYPE_KEY];
         $sku = empty($row[self::SKU_KEY]) ? "" : $row[self::SKU_KEY];
-
+        
         $attributes = Mage::getSingleton('eav/config')
             ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
             ->getAttributeCollection()
             ->addSetInfo();
-
+        
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
         if (!$product) {
             $product = Mage::getModel('catalog/product');
@@ -227,14 +236,15 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->setTypeId($type);
             $product->setCreatedAt(strtotime('now'));
             $product->setStoreId(\Mage::app()->getStore()->getId());
+            $product->setAttributeSetId(Mage::getModel('catalog/product')->getDefaultAttributeSetId());
         }
-
+        
         foreach ($row as $key => $value) {
-
+            
             if (preg_match("/^att_/is", $key)) {
-
+                
                 $attributeName = preg_replace("/^att_/is", '', $key);
-
+                
                 $type = null;
                 /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
                 foreach ($attributes as $attribute) {
@@ -242,7 +252,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                         $type = $attribute->getData('frontend_input');
                     }
                 }
-
+                
                 switch ($type) {
                     case "select":
                         $product->setData($attributeName, $product->getResource()->getAttribute($attributeName)->getSource()->getOptionId($value));
@@ -256,8 +266,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 }
             }
         }
-
-
+        
+        
         if (isset($row[self::TITLE_KEY])) {
             $product->setName(empty($row[self::TITLE_KEY]) ? "." : $row[self::TITLE_KEY]);
         }
@@ -303,10 +313,10 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         if (isset($row[self::META_DESCRIPTION_KEY])) {
             $product->setMetaDescription($row[self::META_DESCRIPTION_KEY]);
         }
-
+        
         return $product;
     }
-
+    
     public function getRowHeader($attributeCodes)
     {
         $headers = [
@@ -327,30 +337,30 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             self::CONFIGURABLE_ATTRIBUTES_KEY,
             self::PARENT_SKU_KEY,
         ];
-
+        
         foreach ($attributeCodes as $attributeCode) {
             $headers[] = "att_" . $attributeCode;
         }
-
+        
         return $headers;
     }
-
+    
     public function productToRow($product, $attributeCodes, $includeImages = true)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
-
+        
         $attributes = Mage::getSingleton('eav/config')
             ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
             ->getAttributeCollection()
             ->addSetInfo();
-
+        
         $imageUrls = [];
         if (count($product->getMediaGalleryImages()) && $includeImages) {
             foreach ($product->getMediaGalleryImages() as $image) {
                 $imageUrls[] = $image->getUrl();
             }
         }
-
+        
         $usedProductAttributeCodes = [];
         if ($product->getTypeId() == "configurable") {
             $usedProductAttributes = $product->getTypeInstance()->getUsedProductAttributes($product);
@@ -358,8 +368,8 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 $usedProductAttributeCodes[] = $attribute->getAttributeCode();
             }
         }
-
-
+        
+        
         $parentSku = "";
         if ($product->getTypeId() == "simple") {
             $parentIds = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($product->getId());
@@ -371,7 +381,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 $parentSku = $parent->getSku();
             }
         }
-
+        
         $row = [
             $product->getSku(),
             $product->getTypeId(),
@@ -390,16 +400,16 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             implode("|", $usedProductAttributeCodes),
             $parentSku,
         ];
-
-
+        
+        
         foreach ($attributeCodes as $attributeCode) {
-
+            
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
             foreach ($attributes as $attribute) {
                 if ($attributeCode == $attribute->getName()) {
-
+                    
                     $type = $attribute->getData('frontend_input');
-
+                    
                     switch ($type) {
                         case "select":
                             $row[] = $product->getAttributeText($attributeCode);
@@ -414,7 +424,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 }
             }
         }
-
+        
         return $row;
     }
 }
