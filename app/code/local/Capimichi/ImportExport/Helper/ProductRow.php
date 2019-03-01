@@ -98,6 +98,36 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     /**
      * @param $row
      *
+     * @return array
+     * @throws Exception
+     */
+    public function getImportAttributeCodes($row)
+    {
+        $codes = [];
+        
+        foreach ($row as $key => $value) {
+            
+            if (preg_match("/^att_/is", $key)) {
+                
+                $attributeName = preg_replace("/^att_/is", '', $key);
+                
+                $attr = Mage::getResourceModel('catalog/eav_attribute')
+                    ->loadByCode('catalog_product', $attributeName);
+                
+                if (!$attr->getId()) {
+                    throw new Exception(sprintf("Missing attribute %s", $attributeName));
+                }
+                
+                $codes[] = $attributeName;
+            }
+        }
+        
+        return $codes;
+    }
+    
+    /**
+     * @param $row
+     *
      * @return mixed
      *
      * @throws \Exception
