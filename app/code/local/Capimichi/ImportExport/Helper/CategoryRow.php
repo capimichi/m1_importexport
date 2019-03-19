@@ -17,6 +17,8 @@ class Capimichi_ImportExport_Helper_CategoryRow extends Mage_Core_Helper_Abstrac
         
         $nameGroupsCategories = [];
         
+        $rootCategory = Mage::getModel('catalog/category')->load(2);
+        
         foreach ($names as $nameGroup) {
             
             $nameGroupItems = explode(">", $nameGroup);
@@ -28,7 +30,7 @@ class Capimichi_ImportExport_Helper_CategoryRow extends Mage_Core_Helper_Abstrac
                 $name = trim($name);
                 
                 if (!$index) {
-                    $parent = Mage::getModel('catalog/category')->load(2);
+                    $parent = $rootCategory;
                 } else {
                     $parent = $nameGroupCategories[$index - 1];
                 }
