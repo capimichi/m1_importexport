@@ -61,7 +61,7 @@ class Capimichi_ImportExport_Helper_CategoryRow extends Mage_Core_Helper_Abstrac
         return $nameGroupsCategories;
     }
     
-    public function getRowHeader($attributeCodes)
+    public function getRowHeader()
     {
         $headers = [
             Capimichi_ImportExport_Helper_ProductRow::SKU_KEY,

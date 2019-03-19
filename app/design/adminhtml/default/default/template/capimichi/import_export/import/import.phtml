@@ -26,6 +26,8 @@
     </label>
 
     <input type="submit" value="Importa categorie">
+
+    <a id="import_categories_url" style="display: none;" href="#">Scarica associazione SKU / ID</a>
 </form>
 <p></p>
 <p></p>
@@ -94,6 +96,11 @@
                 data: formData,
                 success: function (response) {
                     console.log(response);
+                    var $a = jQuery("#import_categories_url");
+                    if (response.category_association_url) {
+                        $a.attr('href', response.category_association_url);
+                        $a.fadeIn(0);
+                    }
                     $j("body").waitMe("hide");
                 },
                 error: function (request, status, error) {

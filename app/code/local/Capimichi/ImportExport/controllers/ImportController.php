@@ -241,11 +241,13 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $filePath = $_FILES['file']['tmp_name'];
             
             $rows = [];
-            $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
+            $headers = Mage::helper('importexport/CategoryRow')->getRowHeader();
             
             $response['categories'] = [];
             
             fputcsv($fOut, $headers);
+            
+            $hasSkus = false;
             
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
                 
@@ -255,6 +257,8 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 
                 if ($sku) {
                     fputcsv($fOut, Mage::helper('importexport/CategoryRow')->categoriesToRow($sku, $categoriesGroups));
+                    
+                    $hasSkus = true;
                 }
                 
                 $response['categories'][] = $categoriesGroups;
@@ -262,7 +266,11 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             
             fclose($fOut);
             
-            $response['url'] = $responseFileDirUrl . $filename;
+            if ($hasSkus) {
+                $response['category_association_url'] = $responseFileDirUrl . $filename;
+            } else {
+                $response['category_association_url'] = null;
+            }
             
         }
         
