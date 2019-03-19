@@ -2,7 +2,7 @@
 
 class Capimichi_ImportExport_Helper_CategorytRow extends Mage_Core_Helper_Abstract
 {
-    const NAME_KEY = "nome";
+    const NAME_KEY = "nome_categorie";
     const SKU_KEY  = "riferimento";
     
     /**
