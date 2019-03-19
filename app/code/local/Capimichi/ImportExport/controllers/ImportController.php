@@ -220,7 +220,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         ];
         
         if (isset($_FILES['file'])) {
-            $relativeDir = "import" . DIRECTORY_SEPARATOR;
+            $relativeDir = "import" . DIRECTORY_SEPARATOR . "category-association" . DIRECTORY_SEPARATOR;
             
             $responseFileDir = Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . $relativeDir;
             $responseFileDirUrl = Mage::getBaseUrl('media') . DIRECTORY_SEPARATOR . $relativeDir;
