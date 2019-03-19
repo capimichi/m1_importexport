@@ -251,6 +251,12 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 
                 $categoriesGroups = Mage::helper('importexport/CategoryRow')->rowToCategories($row);
                 
+                $sku = Mage::helper('importexport/ProductRow')->getSku($row);
+                
+                if ($sku) {
+                    fputcsv($fOut, Mage::helper('importexport/CategoryRow')->categoriesToRow($sku, $categoriesGroups));
+                }
+                
                 $response['categories'][] = $categoriesGroups;
             }
             
