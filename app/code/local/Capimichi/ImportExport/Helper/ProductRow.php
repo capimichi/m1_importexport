@@ -39,6 +39,16 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
      *
      * @return mixed
      */
+    public function getSku($row)
+    {
+        return isset($row[self::SKU_KEY]) ? $row[self::SKU_KEY] : null;
+    }
+    
+    /**
+     * @param $row
+     *
+     * @return mixed
+     */
     public function getRowProductType($row)
     {
         return isset($row[self::TYPE_KEY]) ? $row[self::TYPE_KEY] : 'simple';

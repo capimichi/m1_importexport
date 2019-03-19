@@ -220,6 +220,24 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         ];
         
         if (isset($_FILES['file'])) {
+            $relativeDir = "import" . DIRECTORY_SEPARATOR;
+            
+            $responseFileDir = Mage::getBaseUrl('media') . DIRECTORY_SEPARATOR . $relativeDir;
+            $responseFileDirUrl = Mage::getBaseUrl('media') . DIRECTORY_SEPARATOR . $relativeDir;
+            
+            
+            if (!file_exists($responseFileDir)) {
+                mkdir($responseFileDir, 0777, true);
+            }
+            
+            $filename = implode("-", [
+                'cm-category-association',
+                strtotime('now'),
+                '.csv',
+            ]);
+            $responseFilePath = $responseFileDir . $filename;
+            $fOut = fopen($responseFilePath, "w");
+            
             $filePath = $_FILES['file']['tmp_name'];
             
             $rows = [];
@@ -227,12 +245,19 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             
             $response['categories'] = [];
             
+            fputcsv($fOut, $headers);
+            
             foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
                 
                 $categoriesGroups = Mage::helper('importexport/CategoryRow')->rowToCategories($row);
                 
                 $response['categories'][] = $categoriesGroups;
             }
+            
+            fclose($fOut);
+            
+            $response['url'] = $responseFileDirUrl . $filename;
+            
         }
         
         echo json_encode($response);
