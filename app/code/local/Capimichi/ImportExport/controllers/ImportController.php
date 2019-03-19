@@ -209,4 +209,32 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
         
         echo json_encode($response);
     }
+    
+    public function ajaximportcategoriesAction()
+    {
+        header('Content-Type: application/json');
+        
+        $response = [
+            'status' => 'OK',
+            'errors' => [],
+        ];
+        
+        if (isset($_FILES['file'])) {
+            $filePath = $_FILES['file']['tmp_name'];
+            
+            $rows = [];
+            $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
+            
+            $response['categories'] = [];
+            
+            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                
+                $categoriesGroups = Mage::helper('importexport/CategoryRow')->rowToCategories($row);
+                
+                $response['categories'][] = $categoriesGroups;
+            }
+        }
+        
+        echo json_encode($response);
+    }
 }
