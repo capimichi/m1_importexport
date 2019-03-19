@@ -229,10 +229,12 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             if (!file_exists($responseFileDir)) {
                 mkdir($responseFileDir, 0777, true);
             }
+    
+            $d = new DateTime('now', new DateTimeZone('Europe/San_Marino'));
             
             $filename = implode("-", [
                 'cm-category-association',
-                strtotime('now'),
+                $d->format('Y-m-d-H-i-s'),
                 '.csv',
             ]);
             $responseFilePath = $responseFileDir . $filename;
