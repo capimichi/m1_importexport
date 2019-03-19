@@ -1,6 +1,6 @@
 <?php
 
-class Capimichi_ImportExport_Helper_CategorytRow extends Mage_Core_Helper_Abstract
+class Capimichi_ImportExport_Helper_CategoryRow extends Mage_Core_Helper_Abstract
 {
     const NAME_KEY = "nome_categorie";
     const SKU_KEY  = "riferimento";
