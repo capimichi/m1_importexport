@@ -229,6 +229,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         $langCodes = [
             "en",
             "it",
+            "de",
+            "fr",
+            "es",
         ];
         
         $product = \Mage::getModel('catalog/product')->load($product->getId());
