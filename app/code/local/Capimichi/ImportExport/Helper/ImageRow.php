@@ -42,19 +42,21 @@ class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
                     $content = file_get_contents($image);
                 }
             } else {
-                $content = file_get_contents($image);
+                $ch = curl_init();
+                $timeout = 15;
+                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36	');
+                curl_setopt($ch, CURLOPT_URL, $image);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                $content = curl_exec($ch);
+                curl_close($ch);
             }
             $tempImagePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $slug;
             file_put_contents($tempImagePath, $content);
             $info = getimagesize($tempImagePath);
             $extension = image_type_to_extension($info[2]);
             
-            if (!$extension) {
-                $file = new SplFileInfo($tempImagePath);
-                $extension = $file->getExtension();
-            }
-            
-            $imagePath = $tempImagePath . "." . $extension;
+            $imagePath = $tempImagePath . "." . ltrim($extension, ".");
             rename($tempImagePath, $imagePath);
             $imagePaths[] = $imagePath;
         }
