@@ -9,12 +9,12 @@
 class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
 {
     const IMAGES_KEY = "immagini";
-
+    
     public function test()
     {
         return "SI";
     }
-
+    
     public function rowToImages($row)
     {
         $images = empty($row[self::IMAGES_KEY]) ? [] : explode("|", $row[self::IMAGES_KEY]);
@@ -22,16 +22,16 @@ class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
         if (!file_exists($imagesDir)) {
             mkdir($imagesDir, 0777, true);
         }
-
+        
         $imagePaths = [];
-
+        
         foreach ($images as $image) {
-
+            
             $slug = implode("_", [
                 'cmimportimage',
                 md5($image),
             ]);
-
+            
             if (
                 !preg_match("/^http:\/\//is", $image)
                 && !preg_match("/^https:\/\//is", $image)
@@ -48,12 +48,18 @@ class Capimichi_ImportExport_Helper_ImageRow extends Mage_Core_Helper_Abstract
             file_put_contents($tempImagePath, $content);
             $info = getimagesize($tempImagePath);
             $extension = image_type_to_extension($info[2]);
+            
+            if (!$extension) {
+                $file = new SplFileInfo($tempImagePath);
+                $extension = $file->getExtension();
+            }
+            
             $imagePath = $tempImagePath . "." . $extension;
             rename($tempImagePath, $imagePath);
             $imagePaths[] = $imagePath;
         }
-
+        
         return $imagePaths;
-
+        
     }
 }
