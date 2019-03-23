@@ -28,8 +28,8 @@
         $stores = Mage::app()->getStores();
         
         foreach ($stores as $store) : ?>
-            <label>Store view "<?php echo $store; ?>" <input type="checkbox"
-                                                             name="store_view_<?php echo $store; ?>"></label>
+            <label>Store view "<?php echo $store->getName(); ?>" <input type="checkbox"
+                                                                        name="store_view_<?php echo $store->getCode(); ?>"></label>
         <?php endforeach; ?>
         &nbsp;
         <label>
