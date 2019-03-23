@@ -24,18 +24,21 @@
                 ?>
             </select>
         </label>
+        <p></p>
         <?php
         $stores = Mage::app()->getStores();
         
         foreach ($stores as $store) : ?>
             <label>Store view "<?php echo $store->getName(); ?>" <input type="checkbox"
                                                                         name="store_view_<?php echo $store->getCode(); ?>"></label>
+            <p></p>
         <?php endforeach; ?>
         &nbsp;
         <label>
             Pagina
             <select id="select_page" data-template="<option value='{page}'>{page}</option>" name="page"></select>
         </label>
+        <p></p>
         <input type="submit" value="Esporta">
     </div>
 
