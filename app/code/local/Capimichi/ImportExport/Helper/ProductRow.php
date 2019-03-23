@@ -361,7 +361,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $product;
     }
     
-    public function getRowHeader($attributeCodes)
+    public function getRowHeader($attributeCodes, $storeViewCodes)
     {
         $headers = [
             self::SKU_KEY,
@@ -386,10 +386,15 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $headers[] = "att_" . $attributeCode;
         }
         
+        foreach ($storeViewCodes as $storeViewCode) {
+            $headers[] = 'titolo_' . $storeViewCode;
+            $headers[] = 'descrizione_' . $storeViewCode;
+        }
+        
         return $headers;
     }
     
-    public function productToRow($product, $attributeCodes, $includeImages = true)
+    public function productToRow($product, $attributeCodes, $storeViewCodes, $includeImages = true)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
         
@@ -467,6 +472,11 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                     }
                 }
             }
+        }
+        
+        foreach ($storeViewCodes as $storeViewCode) {
+            $row[] = 'titolo_' . $storeViewCode;
+            $row[] = 'descrizione_' . $storeViewCode;
         }
         
         return $row;
