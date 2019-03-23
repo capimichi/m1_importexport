@@ -21,6 +21,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
     public function exportAction()
     {
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
+        $storeViewCode = isset($_POST['storeview']) ? $_POST['storeview'] : null;
         $includeImages = isset($_POST['images']) ? true : false;
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 500;

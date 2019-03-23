@@ -24,18 +24,13 @@
                 ?>
             </select>
         </label>
-        <label>
-            Store View
-            <select id="select_storeview" name="storeview">
-                <option value>-</option>
-                <?php
-                $stores = Mage::app()->getStores();
-                
-                foreach ($stores as $store) : ?>
-                    <option value="<?php echo $store->getCode(); ?>"><?php echo $store->getCode(); ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
+        <?php
+        $stores = Mage::app()->getStores();
+        
+        foreach ($stores as $store) : ?>
+            <label>Store view "<?php echo $store; ?>" <input type="checkbox"
+                                                             name="store_view_<?php echo $store; ?>"></label>
+        <?php endforeach; ?>
         &nbsp;
         <label>
             Pagina
