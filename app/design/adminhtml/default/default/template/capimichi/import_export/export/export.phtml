@@ -14,7 +14,7 @@
                 <?php
                 $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'manufacturer');
-
+                
                 if ($attribute->usesSource()) {
                     $options = $attribute->getSource()->getAllOptions(false);
                     foreach ($options as $option) : ?>
@@ -22,6 +22,18 @@
                     <?php endforeach;
                 }
                 ?>
+            </select>
+        </label>
+        <label>
+            Store View
+            <select id="select_storeview" name="storeview">
+                <option value>-</option>
+                <?php
+                $stores = Mage::app()->getStores();
+                
+                foreach ($stores as $store) : ?>
+                    <option value="<?php echo $store->getCode(); ?>"><?php echo $store->getCode(); ?></option>
+                <?php endforeach; ?>
             </select>
         </label>
         &nbsp;
@@ -51,7 +63,7 @@
             ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
             ->getAttributeCollection()
             ->addSetInfo();
-
+        
         /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
         foreach ($attributes as $attribute) : ?>
             <div class="attribute">
