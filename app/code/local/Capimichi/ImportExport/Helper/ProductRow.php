@@ -361,7 +361,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
         return $product;
     }
     
-    public function getRowHeader($attributeCodes, $storeViewCodes)
+    public function getRowHeader($attributeCodes, $storeViews)
     {
         $headers = [
             self::SKU_KEY,
@@ -386,15 +386,15 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $headers[] = "att_" . $attributeCode;
         }
         
-        foreach ($storeViewCodes as $storeViewCode) {
-            $headers[] = 'titolo_' . $storeViewCode;
-            $headers[] = 'descrizione_' . $storeViewCode;
+        foreach ($storeViews as $storeView) {
+            $headers[] = 'titolo_' . $storeView->getCode();
+            $headers[] = 'descrizione_' . $storeView->getCode();
         }
         
         return $headers;
     }
     
-    public function productToRow($product, $attributeCodes, $storeViewCodes, $includeImages = true)
+    public function productToRow($product, $attributeCodes, $storeViews, $includeImages = true)
     {
         $product = \Mage::getModel('catalog/product')->load($product->getId());
         
@@ -474,9 +474,12 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             }
         }
         
-        foreach ($storeViewCodes as $storeViewCode) {
-            $row[] = 'titolo_' . $storeViewCode;
-            $row[] = 'descrizione_' . $storeViewCode;
+        foreach ($storeViews as $storeView) {
+            
+            $storeViewProduct = $product = Mage::getModel('catalog/product')->setStoreId($storeView->getId())->load($product->getId());
+            
+            $row[] = $storeViewProduct->getName();
+            $row[] = $storeViewProduct->getDescription();
         }
         
         return $row;

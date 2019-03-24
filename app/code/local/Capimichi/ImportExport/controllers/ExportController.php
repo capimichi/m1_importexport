@@ -22,13 +22,13 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
     {
         $manufacturer = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : null;
         
-        $storeViewCodes = [];
+        $storeViews = [];
         $stores = Mage::app()->getStores();
         
         foreach ($stores as $store) {
             $storeViewCode = isset($_POST['store_view_' . $store->getCode()]) ? $_POST['store_view_' . $store->getCode()] : null;
             if ($storeViewCode) {
-                $storeViewCodes[] = $store->getCode();
+                $storeViews[] = $store;
             }
         }
         $includeImages = isset($_POST['images']) ? true : false;
