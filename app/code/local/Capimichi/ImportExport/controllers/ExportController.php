@@ -28,7 +28,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         foreach ($stores as $store) {
             $storeViewCode = isset($_POST['store_view_' . $store->getCode()]) ? $_POST['store_view_' . $store->getCode()] : null;
             if ($storeViewCode) {
-                $storeViewCodes[] = $storeViewCode;
+                $storeViewCodes[] = $store->getCode();
             }
         }
         $includeImages = isset($_POST['images']) ? true : false;
