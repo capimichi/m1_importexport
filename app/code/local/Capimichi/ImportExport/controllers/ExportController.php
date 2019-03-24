@@ -64,12 +64,12 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         $exportedIds = [];
         $attributeCodes = array_merge($attributeCodes, Mage::helper('importexport/ProductRow')->getProductsUsedAttributeCodes($products));
         
-        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes, $storeViewCodes));
+        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes, $storeViews));
         foreach ($products as $product) {
             if (!in_array($product->getId(), $exportedIds)) {
                 $exportedIds[] = $product->getId();
                 
-                $row = Mage::helper('importexport/ProductRow')->productToRow($product, $attributeCodes, $storeViewCodes, $includeImages);
+                $row = Mage::helper('importexport/ProductRow')->productToRow($product, $attributeCodes, $storeViews, $includeImages);
                 fputcsv($f, $row);
                 
                 if ($product->type_id == 'configurable') {
