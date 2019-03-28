@@ -80,7 +80,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                         if (!in_array($childrenId, $exportedIds)) {
                             $childProduct = Mage::getModel('catalog/product')->load($childrenId);
                             $exportedIds[] = $childProduct->getId();
-                            $row = Mage::helper('importexport/ProductRow')->productToRow($childProduct, $attributeCodes, $includeImages);
+                            $row = Mage::helper('importexport/ProductRow')->productToRow($childProduct, $attributeCodes, $storeViews, $includeImages);
                             fputcsv($f, $row);
                         }
                     }
