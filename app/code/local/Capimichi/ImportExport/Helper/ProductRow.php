@@ -316,6 +316,9 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $product->setName(empty($row[self::TITLE_KEY]) ? "." : $row[self::TITLE_KEY]);
         }
         if (isset($row[self::STATUS_KEY])) {
+            if ($row[self::STATUS_KEY] == 0) {
+                $row[self::STATUS_KEY] = 2;
+            }
             $product->setStatus($row[self::STATUS_KEY]);
         }
         if (isset($row[self::WEIGHT_KEY])) {
