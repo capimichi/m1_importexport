@@ -87,19 +87,9 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             'line'    => $exception->getLine(),
                         ];
                     }
-                    
-                    $tProduct = Mage::helper('importexport/ProductRow')->translateproduct($product, $row);
-                    
-                    try {
-                        $tProduct->save();
-                    } catch (\Exception $exception) {
-                        $response['errors'][] = [
-                            'message' => $exception->getMessage(),
-                            'file'    => $exception->getFile(),
-                            'line'    => $exception->getLine(),
-                        ];
-                    }
-                    
+    
+                    Mage::helper('importexport/ProductRow')->translateproduct($product, $row);
+
                     $rows[] = $product->getId();
                 }
                 $response['products'] = $rows;

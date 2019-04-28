@@ -226,6 +226,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     
     public function translateproduct($product, $row)
     {
+        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
         
         $langCodes = [];
         $stores = Mage::app()->getStores();
@@ -233,8 +234,7 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
             $langCodes[] = $store->getCode();
         }
         
-        
-        $product = \Mage::getModel('catalog/product')->load($product->getId());
+        $tProduct = \Mage::getModel('catalog/product')->load($product->getId());
         
         foreach ($langCodes as $langCode) {
             $titleKey = str_replace("{langkey}", $langCode, self::TRANSLATE_TITLE_KEY);
@@ -247,24 +247,21 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
                 $store = \Mage::getModel('core/store')->load($langCode, 'code');
                 if ($store) {
                     $storeId = $store->getId();
-                    $product->setStoreId($storeId);
                     
                     if (!empty($row[$titleKey])) {
                         $title = $row[$titleKey];
-                        $product->setName($title);
+                        $tProduct->setStoreId($storeId)->setName($title);
                     }
                     
                     if (!empty($row[$descriptionKey])) {
                         $description = $row[$descriptionKey];
-                        $product->setDescription($description);
+                        $tProduct->setStoreId($storeId)->setDescription($description);
                     }
                     
-                    $product->save();
+                    $tProduct->save();
                 }
             }
         }
-        return $product;
-        
     }
     
     /**
