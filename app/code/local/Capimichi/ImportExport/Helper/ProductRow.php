@@ -226,30 +226,40 @@ class Capimichi_ImportExport_Helper_ProductRow extends Mage_Core_Helper_Abstract
     
     public function translateproduct($product, $row)
     {
-        $langCodes = [
-            "en",
-            "it",
-            "de",
-            "fr",
-            "es",
-        ];
+        
+        $langCodes = [];
+        $stores = Mage::app()->getStores();
+        foreach ($stores as $store) {
+            $langCodes[] = $store->getCode();
+        }
+        
         
         $product = \Mage::getModel('catalog/product')->load($product->getId());
         
         foreach ($langCodes as $langCode) {
-            $store = \Mage::getModel('core/store')->load($langCode, 'code');
-            if ($store) {
-                $storeId = $store->getId();
-                $product->setStoreId($storeId);
-                $titleKey = str_replace("{langkey}", $langCode, self::TRANSLATE_TITLE_KEY);
-                if (!empty($row[$titleKey])) {
-                    $title = $row[$titleKey];
-                    $product->setName($title);
-                }
-                $descriptionKey = str_replace("{langkey}", $langCode, self::TRANSLATE_DESCRIPTION_KEY);
-                if (!empty($row[$descriptionKey])) {
-                    $description = $row[$descriptionKey];
-                    $product->setDescription($description);
+            $titleKey = str_replace("{langkey}", $langCode, self::TRANSLATE_TITLE_KEY);
+            $descriptionKey = str_replace("{langkey}", $langCode, self::TRANSLATE_DESCRIPTION_KEY);
+            
+            if (
+                !empty($row[$titleKey]) ||
+                !empty($row[$descriptionKey])
+            ) {
+                $store = \Mage::getModel('core/store')->load($langCode, 'code');
+                if ($store) {
+                    $storeId = $store->getId();
+                    $product->setStoreId($storeId);
+                    
+                    if (!empty($row[$titleKey])) {
+                        $title = $row[$titleKey];
+                        $product->setName($title);
+                    }
+                    
+                    if (!empty($row[$descriptionKey])) {
+                        $description = $row[$descriptionKey];
+                        $product->setDescription($description);
+                    }
+                    
+                    $product->save();
                 }
             }
         }
