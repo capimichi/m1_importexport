@@ -62,14 +62,14 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
         }
         
         $exportedIds = [];
-        $attributeCodes = array_merge($attributeCodes, Mage::helper('importexport/ProductRow')->getProductsUsedAttributeCodes($products));
+        $attributeCodes = array_merge($attributeCodes, Mage::helper('csvimportexport/ProductRow')->getProductsUsedAttributeCodes($products));
         
-        fputcsv($f, Mage::helper('importexport/ProductRow')->getRowHeader($attributeCodes, $storeViews));
+        fputcsv($f, Mage::helper('csvimportexport/ProductRow')->getRowHeader($attributeCodes, $storeViews));
         foreach ($products as $product) {
             if (!in_array($product->getId(), $exportedIds)) {
                 $exportedIds[] = $product->getId();
                 
-                $row = Mage::helper('importexport/ProductRow')->productToRow($product, $attributeCodes, $storeViews, $includeImages);
+                $row = Mage::helper('csvimportexport/ProductRow')->productToRow($product, $attributeCodes, $storeViews, $includeImages);
                 fputcsv($f, $row);
                 
                 if ($product->type_id == 'configurable') {
@@ -80,7 +80,7 @@ class Capimichi_ImportExport_ExportController extends Mage_Adminhtml_Controller_
                         if (!in_array($childrenId, $exportedIds)) {
                             $childProduct = Mage::getModel('catalog/product')->load($childrenId);
                             $exportedIds[] = $childProduct->getId();
-                            $row = Mage::helper('importexport/ProductRow')->productToRow($childProduct, $attributeCodes, $storeViews, $includeImages);
+                            $row = Mage::helper('csvimportexport/ProductRow')->productToRow($childProduct, $attributeCodes, $storeViews, $includeImages);
                             fputcsv($f, $row);
                         }
                     }

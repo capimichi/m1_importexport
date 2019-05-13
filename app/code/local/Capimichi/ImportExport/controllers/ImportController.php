@@ -36,16 +36,16 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             copy($filePath, $importFile);
             
             $rows = [];
-            $headers = Mage::helper('importexport/Csv')->getHeaders($filePath);
+            $headers = Mage::helper('csvimportexport/Csv')->getHeaders($filePath);
             
             if (!in_array(Capimichi_ImportExport_Helper_ProductRow::NEW_SKU_KEY, $headers)) {
                 // In questo ciclo tutti i prodotti (semplici e configurabili)
                 // vengono creati, però ancora non viene definita l'associazione
-                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                foreach (Mage::helper('csvimportexport/Csv')->getRows($filePath) as $row) {
                     
-                    $allAttributeCodes = Mage::helper('importexport/ProductRow')->getImportAttributeCodes($row);
+                    $allAttributeCodes = Mage::helper('csvimportexport/ProductRow')->getImportAttributeCodes($row);
                     
-                    $product = Mage::helper('importexport/ProductRow')->rowToProduct($row);
+                    $product = Mage::helper('csvimportexport/ProductRow')->rowToProduct($row);
                     try {
                         $product->save();
                     } catch (\Exception $exception) {
@@ -56,7 +56,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         ];
                     }
                     
-                    $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
+                    $stockItem = Mage::helper('csvimportexport/StockRow')->rowToStock($product, $row);
                     try {
                         $stockItem->save();
                     } catch (\Exception $exception) {
@@ -68,7 +68,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                     }
                     
                     try {
-                        $imageFiles = Mage::helper('importexport/ImageRow')->rowToImages($row);
+                        $imageFiles = Mage::helper('csvimportexport/ImageRow')->rowToImages($row);
                         array_reverse($imageFiles);
                         foreach ($imageFiles as $imageFile) {
                             $imageViews = [
@@ -88,7 +88,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                         ];
                     }
     
-                    Mage::helper('importexport/ProductRow')->translateproduct($product, $row);
+                    Mage::helper('csvimportexport/ProductRow')->translateproduct($product, $row);
 
                     $rows[] = $product->getId();
                 }
@@ -96,22 +96,22 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                 
                 // In questo ciclo viene definita l'associazione tra prodotti
                 // configurabili e rispettive variazioni
-                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                foreach (Mage::helper('csvimportexport/Csv')->getRows($filePath) as $row) {
                     
-                    if (Mage::helper('importexport/ProductRow')->getRowProductType($row) == "configurable") {
+                    if (Mage::helper('csvimportexport/ProductRow')->getRowProductType($row) == "configurable") {
                         
-                        $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('importexport/ProductRow')->getRowProductSku($row));
+                        $product = \Mage::getModel('catalog/product')->loadByAttribute('sku', Mage::helper('csvimportexport/ProductRow')->getRowProductSku($row));
                         
                         $childRows = [];
-                        foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $childRow) {
-                            if (Mage::helper('importexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
+                        foreach (Mage::helper('csvimportexport/Csv')->getRows($filePath) as $childRow) {
+                            if (Mage::helper('csvimportexport/ProductRow')->getRowProductParentSku($childRow) == $product->getSku()) {
                                 $childRows[] = $childRow;
                             }
                         }
                         
-                        $attributeCodes = Mage::helper('importexport/ProductRow')->getConfigurableProductUsedAttributeCodes($row);
+                        $attributeCodes = Mage::helper('csvimportexport/ProductRow')->getConfigurableProductUsedAttributeCodes($row);
                         
-                        $product = Mage::helper('importexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
+                        $product = Mage::helper('csvimportexport/ProductRow')->setConfigurableProductUsedAttributes($product, $attributeCodes);
                         try {
                             $product->save();
                         } catch (\Exception $exception) {
@@ -122,7 +122,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             ];
                         }
                         
-                        $product = Mage::helper('importexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
+                        $product = Mage::helper('csvimportexport/ProductRow')->setConfigurableData($product, $childRows, $attributeCodes);
                         try {
                             $product->save();
                         } catch (\Exception $exception) {
@@ -133,18 +133,18 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
                             ];
                         }
                         
-                        $stockItem = Mage::helper('importexport/StockRow')->rowToStock($product, $row);
+                        $stockItem = Mage::helper('csvimportexport/StockRow')->rowToStock($product, $row);
                         $stockItem->save();
                     }
                 }
             } else {
                 
                 // Ciclo per i nuovi sku
-                foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+                foreach (Mage::helper('csvimportexport/Csv')->getRows($filePath) as $row) {
                     
-                    if (Mage::helper('importexport/ProductRow')->getRowNewSku($row)) {
+                    if (Mage::helper('csvimportexport/ProductRow')->getRowNewSku($row)) {
                         try {
-                            $product = Mage::helper('importexport/ProductRow')->changeSku($row);
+                            $product = Mage::helper('csvimportexport/ProductRow')->changeSku($row);
                             if ($product) {
                                 $product->save();
                             }
@@ -233,7 +233,7 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             $filePath = $_FILES['file']['tmp_name'];
             
             $rows = [];
-            $headers = Mage::helper('importexport/CategoryRow')->getRowHeader();
+            $headers = Mage::helper('csvimportexport/CategoryRow')->getRowHeader();
             
             $response['categories'] = [];
             
@@ -241,14 +241,14 @@ class Capimichi_ImportExport_ImportController extends Mage_Adminhtml_Controller_
             
             $hasSkus = false;
             
-            foreach (Mage::helper('importexport/Csv')->getRows($filePath) as $row) {
+            foreach (Mage::helper('csvimportexport/Csv')->getRows($filePath) as $row) {
                 
-                $categoriesGroups = Mage::helper('importexport/CategoryRow')->rowToCategories($row);
+                $categoriesGroups = Mage::helper('csvimportexport/CategoryRow')->rowToCategories($row);
                 
-                $sku = Mage::helper('importexport/ProductRow')->getSku($row);
+                $sku = Mage::helper('csvimportexport/ProductRow')->getSku($row);
                 
                 if ($sku) {
-                    fputcsv($fOut, Mage::helper('importexport/CategoryRow')->categoriesToRow($sku, $categoriesGroups));
+                    fputcsv($fOut, Mage::helper('csvimportexport/CategoryRow')->categoriesToRow($sku, $categoriesGroups));
                     
                     $hasSkus = true;
                 }
