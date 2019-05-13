@@ -62,7 +62,7 @@
 
 
             $j.ajax({
-                url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximport"); ?>",
+                url: "<?php echo Mage::helper("adminhtml")->getUrl("csvimportexport/import/ajaximport"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -91,7 +91,7 @@
 
 
             $j.ajax({
-                url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximportcategories"); ?>",
+                url: "<?php echo Mage::helper("adminhtml")->getUrl("csvimportexport/import/ajaximportcategories"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -125,7 +125,7 @@
 
 
             $j.ajax({
-                url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/import/ajaximportimages"); ?>",
+                url: "<?php echo Mage::helper("adminhtml")->getUrl("csvimportexport/import/ajaximportimages"); ?>",
                 type: 'POST',
                 data: formData,
                 success: function (response) {

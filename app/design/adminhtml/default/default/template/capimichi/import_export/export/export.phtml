@@ -3,7 +3,7 @@
 <script src="https://cdn.jsdelivr.net/gh/vadimsva/waitMe/waitMe.min.js"></script>
 
 <form id="export_form" method="post"
-      action="<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/export"); ?>">
+      action="<?php echo Mage::helper("adminhtml")->getUrl("csvimportexport/export/export"); ?>">
     <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
 
     <div>
@@ -96,7 +96,7 @@
         var $form = $j("#export_form");
         var formData = new FormData($form[0]);
         $j.ajax({
-            url: "<?php echo Mage::helper("adminhtml")->getUrl("importexport/export/pages"); ?>",
+            url: "<?php echo Mage::helper("adminhtml")->getUrl("csvimportexport/export/pages"); ?>",
             type: 'POST',
             data: formData,
             success: function (response) {

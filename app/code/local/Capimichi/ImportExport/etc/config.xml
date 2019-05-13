@@ -10,22 +10,22 @@
 
     <global>
         <helpers>
-            <importexport>
+            <csvimportexport>
                 <class>Capimichi_ImportExport_Helper</class>
-            </importexport>
+            </csvimportexport>
         </helpers>
     </global>
 
 
     <admin>
         <routers>
-            <importexport>
+            <csvimportexport>
                 <use>admin</use>
                 <args>
                     <module>Capimichi_ImportExport</module>
-                    <frontName>importexport</frontName>
+                    <frontName>csvimportexport</frontName>
                 </args>
-            </importexport>
+            </csvimportexport>
         </routers>
     </admin>
 
@@ -37,11 +37,11 @@
                 <children>
                     <menuitem1 module="ImportExport">
                         <title>Import</title>
-                        <action>importexport/import</action>
+                        <action>csvimportexport/import</action>
                     </menuitem1>
                     <menuitem2 module="ImportExport">
                         <title>Export</title>
-                        <action>importexport/export</action>
+                        <action>csvimportexport/export</action>
                     </menuitem2>
                 </children>
             </menu1>
